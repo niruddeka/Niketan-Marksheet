@@ -3,141 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>নিকেতন মাৰ্কশ্বীট - ৫০ নম্বৰ</title>
+    <title>নিকেতন মাৰ্কশ্বীট জেনেৰেটৰ</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; background-color: #f4f4f4; }
-        .form-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
-        h2 { text-align: center; color: #2c3e50; font-size: 18px; }
-        label { display: block; margin-top: 10px; font-weight: bold; font-size: 14px; }
-        input { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; margin-top: 20px; background-color: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        .weightage-text { font-size: 12px; color: #e67e22; font-weight: normal; }
+        body { font-family: sans-serif; padding: 20px; background-color: #f4f4f4; text-align: center; }
+        .form-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 500px; margin: auto; text-align: left; }
+        h2 { text-align: center; color: #2c3e50; font-size: 20px; margin-bottom: 5px; }
+        p.sub-title { text-align: center; margin-top: 0; font-weight: bold; color: #555; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #333; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 12px; margin-top: 25px; background-color: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 18px; font-weight: bold; }
+        button:hover { background-color: #219150; }
+        .weight-info { font-size: 12px; color: #d35400; font-weight: normal; margin-left: 10px; }
     </style>
 </head>
 <body>
 
 <div class="form-container">
-    <h2>শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</h2>
-    <p style="text-align:center; margin-top:-10px;">প্ৰথম গোট পৰীক্ষা – ২০২৬</p>
+    <h2>শংকৰদেৱ শিশু নিকেতন, ভূরারাঁও</h2>
+    <p class="sub-title">প্ৰথম গোট পৰীক্ষা – ২০২৬<br>শ্ৰেণীঃ – অংকুৰ</p>
     
-    <label>ছাত্ৰ/ছাত্ৰীৰ নাম (অসমীয়াত লিখক):</label>
-    <input type="text" id="name" placeholder="যেনে: ৰমেন ডেকা">
+    <label>ছাত্ৰ/ছাত্ৰীৰ নাম:</label>
+    <input type="text" id="name" placeholder="নাম লিখক">
     
     <label>ৰোল নং:</label>
     <input type="number" id="roll" placeholder="ৰোল লিখক">
     
-    <hr>
-    <h4 style="margin-bottom:5px;">নম্বৰ ভৰাওক (৫০ ৰ ভিতৰত):</h4>
+    <hr style="margin-top: 20px;">
+    <h4 style="text-align:center; color: #2980b9;">নম্বৰ ভৰাওক (৫০ ৰ ভিতৰত)</h4>
     
-    <label>অসমীয়া: <span id="as20" class="weightage-text">(২০%: ০)</span></label>
-    <input type="number" id="as" oninput="calculateWeightage('as', 'as20')">
+    <label>অসমীয়া: <span id="as20" class="weight-info"></span></label>
+    <input type="number" id="as" placeholder="৫০ ৰ ভিতৰত নম্বৰ" oninput="updateUI('as', 'as20')">
     
-    <label>গণিত: <span id="math20" class="weightage-text">(২০%: ০)</span></label>
-    <input type="number" id="math" oninput="calculateWeightage('math', 'math20')">
+    <label>গণিত: <span id="math20" class="weight-info"></span></label>
+    <input type="number" id="math" placeholder="৫০ ৰ ভিতৰত নম্বৰ" oninput="updateUI('math', 'math20')">
     
-    <label>সাধাৰণ জ্ঞান: <span id="gk20" class="weightage-text">(২০%: ০)</span></label>
-    <input type="number" id="gk" oninput="calculateWeightage('gk', 'gk20')">
+    <label>সাধাৰণ জ্ঞান: <span id="gk20" class="weight-info"></span></label>
+    <input type="number" id="gk" placeholder="৫০ ৰ ভিতৰত নম্বৰ" oninput="updateUI('gk', 'gk20')">
     
-    <label>ছবি: <span id="drawing20" class="weightage-text">(২০%: ০)</span></label>
-    <input type="number" id="drawing" oninput="calculateWeightage('drawing', 'drawing20')">
+    <label>ছবি: <span id="drawing20" class="weight-info"></span></label>
+    <input type="number" id="drawing" placeholder="৫০ ৰ ভিতৰত নম্বৰ" oninput="updateUI('drawing', 'drawing20')">
 
-    <button onclick="submitData()">Submit & Print PDF</button>
+    <button onclick="submitAndPrint()">Submit & Download PDF</button>
 </div>
 
 <script>
+    // আপোনাৰ গুগল স্ক্ৰিপ্ট URL
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzCYIYaLvaqLFAaR_whQfKVy9bn_v5vCB9gdG3tby92pJKFbWFzgNmUtYJcJ2foWe4/exec';
 
-    // ইংৰাজী নম্বৰক অসমীয়া নম্বৰলৈ নিবলৈ ফাংচন
-    function toAssameseNumber(num) {
-        const assameseDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-        return num.toString().split('').map(d => assameseDigits[d] || d).join('');
+    // ইংৰাজীৰ পৰা অসমীয়া নম্বৰলৈ নিয়াৰ বাবে
+    function toAssameseNum(n) {
+        const d = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+        return n.toString().replace(/\d/g, m => d[m]);
     }
 
-    function calculateWeightage(inputId, spanId) {
+    function updateUI(inputId, spanId) {
         let val = document.getElementById(inputId).value;
-        let weight = val ? (val * 0.2).toFixed(1) : 0;
-        document.getElementById(spanId).innerText = "(২০%: " + toAssameseNumber(weight) + ")";
+        if(val > 50) { alert("নম্বৰ ৫০ তকৈ বেছি হ'ব নোৱাৰে!"); document.getElementById(inputId).value = ""; return; }
+        let w = val ? (val * 0.2).toFixed(1) : 0;
+        document.getElementById(spanId).innerText = "(২০%: " + toAssameseNum(w) + ")";
     }
 
-    function submitData() {
+    async function submitAndPrint() {
         const name = document.getElementById('name').value;
         const roll = document.getElementById('roll').value;
         
-        const subjects = [
-            { sub: 'অসমীয়া', mark: document.getElementById('as').value },
-            { sub: 'গণিত', mark: document.getElementById('math').value },
-            { sub: 'সাধাৰণ জ্ঞান', mark: document.getElementById('gk').value },
-            { sub: 'ছবি', mark: document.getElementById('drawing').value }
+        if(!name || !roll) { alert("নাম আৰু ৰোল লিখাটো জৰুৰী!"); return; }
+
+        const subs = [
+            { n: 'অসমীয়া', m: document.getElementById('as').value },
+            { n: 'গণিত', m: document.getElementById('math').value },
+            { n: 'সাধাৰণ জ্ঞান', m: document.getElementById('gk').value },
+            { n: 'ছবি', m: document.getElementById('drawing').value }
         ];
 
-        subjects.forEach(item => {
-            if(item.mark !== "") {
+        // গুগল শ্বীটলৈ ডাটা পঠোৱা
+        for (let s of subs) {
+            if(s.m !== "") {
                 fetch(scriptURL, {
                     method: 'POST',
+                    mode: 'no-cors',
                     body: JSON.stringify({
                         name: name,
                         roll: roll,
                         className: 'অংকুৰ',
-                        subject: item.sub,
+                        subject: s.n,
                         fullMarks: 50,
-                        obtained: item.mark,
-                        weightage: (item.mark * 0.2).toFixed(1)
+                        obtained: s.m,
+                        weightage: (s.m * 0.2).toFixed(1)
                     })
                 });
             }
-        });
+        }
 
-        generatePDF(name, roll, subjects);
+        printPDF(name, roll, subs);
+        alert("ডাটা ছেভ হৈছে আৰু পিডিএফ ৰেডী হৈছে।");
     }
 
-    function generatePDF(name, roll, subjects) {
+    function printPDF(name, roll, subs) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         
-        // হেডাৰ (অসমীয়া ফন্টৰ বাবে ডিফল্ট ফন্টত অসমীয়া দেখা নাযাব পাৰে, 
-        // সেয়েহে ইয়াত আমি ইংৰাজীতে ৰাখিছোঁ কিন্তু আপুনি এপত অসমীয়া দেখিব)
-        doc.setFontSize(16);
-        doc.text("SHANKARDEV SHISHU NIKETAN, BHURAGAON", 105, 20, { align: "center" });
-        doc.setFontSize(12);
-        doc.text("FIRST UNIT TEST - 2026", 105, 28, { align: "center" });
-        doc.text("Class: ANKUR", 105, 36, { align: "center" });
+        doc.text("SHANKARDEV SHISHU NIKETAN, BHURAGAON", 105, 20, {align: "center"});
+        doc.text("UNIT TEST - 2026 | CLASS: ANKUR", 105, 30, {align: "center"});
         
-        doc.text("Name: " + name, 20, 50);
-        doc.text("Roll No: " + toAssameseNumber(roll), 20, 58);
+        doc.text("Student Name: " + name, 20, 50);
+        doc.text("Roll No: " + toAssameseNum(roll), 20, 60);
         
-        // টেবুল
-        doc.rect(20, 65, 170, 70);
-        doc.line(20, 75, 190, 75);
-        doc.text("Subject", 25, 71);
-        doc.text("Full Marks", 80, 71);
-        doc.text("Obtained", 120, 71);
-        doc.text("20%", 160, 71);
+        // টেবুলৰ ফ্ৰেম
+        doc.rect(20, 70, 170, 75); 
+        doc.line(20, 80, 190, 80);
+        doc.text("Subject", 25, 77);
+        doc.text("Full", 85, 77);
+        doc.text("Marks", 125, 77);
+        doc.text("20%", 165, 77);
         
-        let y = 85;
-        let totalObtained = 0;
-        let total20 = 0;
-        
-        subjects.forEach(s => {
-            doc.text(s.sub, 25, y);
-            doc.text("50", 85, y);
-            doc.text(s.mark.toString(), 125, y);
-            let w = (s.mark * 0.2).toFixed(1);
-            doc.text(w.toString(), 165, y);
-            totalObtained += Number(s.mark);
-            total20 += Number(w);
+        let y = 90;
+        let totalM = 0;
+        let totalW = 0;
+
+        subs.forEach(s => {
+            doc.text(s.n, 25, y);
+            doc.text("50", 87, y);
+            doc.text(s.m || "0", 127, y);
+            let w = (s.m * 0.2).toFixed(1);
+            doc.text(w.toString(), 167, y);
+            totalM += Number(s.m || 0);
+            totalW += Number(w);
             y += 12;
         });
-        
-        doc.line(20, 125, 190, 125);
-        doc.text("Total", 25, 131);
-        doc.text("200", 85, 131);
-        doc.text(totalObtained.toString(), 125, 131);
-        doc.text(total20.toFixed(1).toString(), 165, 131);
-        
+
+        doc.line(20, 135, 190, 135);
+        doc.text("TOTAL", 25, 142);
+        doc.text("200", 87, 142);
+        doc.text(totalM.toString(), 127, 142);
+        doc.text(totalW.toFixed(1).toString(), 167, 142);
+
         doc.save(name + "_Marksheet.pdf");
     }
 </script>
-
 </body>
 </html>
