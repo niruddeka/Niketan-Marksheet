@@ -8,9 +8,24 @@
         body { font-family: 'Hind Siliguri', sans-serif; background-color: #f0f0f0; margin: 0; padding: 10px; }
         .no-print { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 800px; margin-left: auto; margin-right: auto; }
         
-        /* A4 Page Styling */
-        .page-container { background: white; width: 210mm; min-height: 297mm; padding: 10mm; margin: 0 auto; box-sizing: border-box; display: block; }
-        .marksheet-content { width: 100%; border: 1px solid black; padding: 20px; box-sizing: border-box; min-height: 270mm; }
+        /* A4 Page Formatting - Fixed for Single Page */
+        .page-container { 
+            background: white; 
+            width: 210mm; 
+            height: 296mm; /* Strictly A4 height to avoid 2nd page */
+            padding: 10mm; 
+            margin: 0 auto; 
+            box-sizing: border-box; 
+            display: block;
+            overflow: hidden;
+        }
+        .marksheet-content { 
+            width: 100%; 
+            border: 2px solid black; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            height: 100%; /* Ensures it fills the container from top */
+        }
         
         h2, h3, h4 { margin: 5px; text-align: center; }
         .student-details { text-align: left; margin-top: 30px; font-weight: bold; line-height: 2; }
@@ -20,6 +35,7 @@
         .btn-group { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; }
         button { padding: 12px; flex: 1; min-width: 120px; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; color: white; }
         .btn-update { background: #2196F3; }
+        .btn-fetch { background: #FF9800; }
         .btn-download { background: #4CAF50; }
     </style>
 </head>
@@ -27,50 +43,52 @@
 
     <div class="no-print">
         <h3>মাৰ্কশ্বীট কন্ট্ৰ’ল পেনেল</h3>
-        <input type="text" id="inSchool" placeholder="স্কুলৰ নাম" value="শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও">
+        <input type="text" id="inSchool" placeholder="স্কুলৰ নাম" value="নিকেতনৰ নাম">
         <div style="display: flex; gap: 5px;">
-            <input type="text" id="inExam" placeholder="পৰীক্ষা আৰু চন" value="প্ৰথম গোট পৰীক্ষা – ২০২৬">
-            <input type="text" id="inClass" placeholder="শ্ৰেণী" value="অংকুৰ">
+            <input type="text" id="inExam" placeholder="পৰীক্ষা আৰু চন" value="পৰাক্ষা আৰু চন">
+            <input type="text" id="inClass" placeholder="শ্ৰেণী" value="শ্ৰেণীৰ নাম">
         </div>
         <div style="display: flex; gap: 5px;">
-            <input type="text" id="inName" placeholder="ছাত্ৰৰ সম্পূৰ্ণ নাম">
+            <input type="text" id="inName" placeholder="ছাত্ৰৰ নাম">
             <input type="text" id="inRoll" placeholder="ৰোল নং">
         </div>
-        <input type="number" id="inFullMark" placeholder="প্ৰতি বিষয়ৰ মুঠ নম্বৰ (যেনে: ৫০)" oninput="updateFullMarks()">
+        <input type="number" id="inFullMark" placeholder="মুঠ নম্বৰ (যেনে: ৫০)" oninput="updateFullMarks()">
         <div style="display: flex; gap: 5px;">
             <input type="number" id="mAssam" placeholder="অসমীয়া" oninput="calculate()">
             <input type="number" id="mMath" placeholder="গণিত" oninput="calculate()">
-            <input type="number" id="mGK" placeholder="সাঃ জ্ঞান" oninput="calculate()">
+            <input type="number" id="mGK" placeholder="সাধাৰণ জ্ঞান" oninput="calculate()">
             <input type="number" id="mDrawing" placeholder="ছবি" oninput="calculate()">
         </div>
         <div class="btn-group">
-            <button class="btn-update" onclick="updateAndSave()">Update & Save to Sheet</button>
+            <button class="btn-update" onclick="updateAndSave()">Update & Save</button>
+            <button class="btn-fetch" onclick="fetchStudentData()">Fetch Data</button>
             <button class="btn-download" onclick="downloadPDF()">Download PDF</button>
         </div>
     </div>
 
     <div id="print-area" class="page-container">
         <div class="marksheet-content">
-            <h2 id="outSchool">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</h2>
-            <h3 id="outExam">প্ৰথম গোট পৰীক্ষা – ২০২৬</h3>
-            <h4 id="outClass">শ্ৰেণীঃ – অংকুৰ</h4>
+            <h2 id="outSchool">নিকেতনৰ নাম</h2>
+            <h3 id="outExam">পৰীক্ষা আৰু চন</h3>
+            <h4 id="outClass">শ্ৰেণীৰ নাম</h4>
             <div class="student-details">
                 <p>ছাত্ৰ/ছাত্ৰীৰ নামঃ <span id="outName">................................</span></p>
                 <p>ৰোল নংঃ <span id="outRoll">................</span></p>
             </div>
             <table>
                 <tr><th>বিষয়</th><th>মুঠ নম্বৰ</th><th>প্ৰাপ্ত নম্বৰ</th><th>২০%</th></tr>
-                <tr><td>অসমীয়া</td><td class="fm-cell">৫০</td><td id="rAssam"></td><td id="wAssam"></td></tr>
-                <tr><td>গণিত</td><td class="fm-cell">৫০</td><td id="rMath"></td><td id="wMath"></td></tr>
-                <tr><td>সাধাৰণ জ্ঞান</td><td class="fm-cell">৫০</td><td id="rGK"></td><td id="wGK"></td></tr>
-                <tr><td>ছবি</td><td class="fm-cell">৫০</td><td id="rDrawing"></td><td id="wDrawing"></td></tr>
+                <tr><td>অসমীয়া</td><td class="fm-cell">০০</td><td id="rAssam"></td><td id="wAssam"></td></tr>
+                <tr><td>গণিত</td><td class="fm-cell">০০</td><td id="rMath"></td><td id="wMath"></td></tr>
+                <tr><td>সাধাৰণ জ্ঞান</td><td class="fm-cell">০০</td><td id="rGK"></td><td id="wGK"></td></tr>
+                <tr><td>ছবি</td><td class="fm-cell">০০</td><td id="rDrawing"></td><td id="wDrawing"></td></tr>
                 <tr style="font-weight: bold;"><td>মুঠ</td><td id="totalFull">২০০</td><td id="totalObtained"></td><td id="totalWeight"></td></tr>
             </table>
         </div>
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzCYIYaLvaqLFAaR_whQfKVy9bn_v5vCB9gdG3tby92pJKFbWFzgNmUtYJcJ2foWe4/exec';
+        // আপুনি দিয়া নতুন URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyEbgC9BcDrJVrCJKbYauqAHvg_2vJF6aziHRugGezV7t6caFo7JP5FVhwIfzJaOnSK/exec';
 
         function toAssamese(num) {
             if (num === "" || num === null || num === undefined) return "";
@@ -90,14 +108,12 @@
             let subjects = ['Assam', 'Math', 'GK', 'Drawing'];
             let fm = parseFloat(document.getElementById('inFullMark').value) || 50;
             let total = 0;
-            
             subjects.forEach(sub => {
                 let val = parseFloat(document.getElementById('m' + sub).value) || 0;
                 document.getElementById('r' + sub).innerText = toAssamese(val);
                 document.getElementById('w' + sub).innerText = toAssamese((val * 20 / fm).toFixed(1));
                 total += val;
             });
-
             document.getElementById('totalObtained').innerText = toAssamese(total);
             document.getElementById('totalWeight').innerText = toAssamese((total * 20 / (fm * 4)).toFixed(1));
         }
@@ -106,39 +122,66 @@
             let name = document.getElementById('inName').value;
             let roll = document.getElementById('inRoll').value;
             if(!name || !roll) { alert("নাম আৰু ৰোল নং লিখক"); return; }
-
+            
             document.getElementById('outName').innerText = name;
             document.getElementById('outRoll').innerText = toAssamese(roll);
-            document.getElementById('outSchool').innerText = document.getElementById('inSchool').value;
+            calculate();
 
-            let fm = document.getElementById('inFullMark').value || 50;
-            let mAssam = document.getElementById('mAssam').value || 0;
-            let mMath = document.getElementById('mMath').value || 0;
-            let mGK = document.getElementById('mGK').value || 0;
-            let mDrawing = document.getElementById('mDrawing').value || 0;
-            let total = parseFloat(mAssam) + parseFloat(mMath) + parseFloat(mGK) + parseFloat(mDrawing);
+            let fm = parseFloat(document.getElementById('inFullMark').value) || 50;
+            let mAssam = parseFloat(document.getElementById('mAssam').value) || 0;
+            let mMath = parseFloat(document.getElementById('mMath').value) || 0;
+            let mGK = parseFloat(document.getElementById('mGK').value) || 0;
+            let mDrawing = parseFloat(document.getElementById('mDrawing').value) || 0;
 
             fetch(scriptURL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    name: name, roll: roll, className: document.getElementById('inClass').value, 
-                    fullMarks: fm, obtained: total, 
-                    mAssam: mAssam, mMath: mMath, mGK: mGK, mDrawing: mDrawing
+                    name: name, roll: roll, className: document.getElementById('inClass').value,
+                    fullMarks: fm, obtained: (mAssam+mMath+mGK+mDrawing),
+                    mAssam: mAssam, wAssam: (mAssam*20/fm).toFixed(1),
+                    mMath: mMath, wMath: (mMath*20/fm).toFixed(1),
+                    mGK: mGK, wGK: (mGK*20/fm).toFixed(1),
+                    mDrawing: mDrawing, wDrawing: (mDrawing*20/fm).toFixed(1)
                 })
             }).then(() => alert("Data Saved Successfully!"));
         }
 
+        // Fetch Data Function - Requires doGet in Apps Script
+        function fetchStudentData() {
+            let name = document.getElementById('inName').value;
+            let roll = document.getElementById('inRoll').value;
+            if(!name || !roll) { alert("নাম আৰু ৰোল নং দিয়াটো বাধ্যতামূলক"); return; }
+            
+            alert("Fetching data for: " + name + " (Roll: " + roll + ")");
+            fetch(scriptURL + "?name=" + name + "&roll=" + roll)
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "found") {
+                    document.getElementById('inFullMark').value = data.fullMarks;
+                    document.getElementById('mAssam').value = data.mAssam;
+                    document.getElementById('mMath').value = data.mMath;
+                    document.getElementById('mGK').value = data.mGK;
+                    document.getElementById('mDrawing').value = data.mDrawing;
+                    updateFullMarks();
+                    alert("Data Loaded!");
+                } else {
+                    alert("Student not found!");
+                }
+            }).catch(e => alert("Error or Fetch not configured in Script"));
+        }
+
         function downloadPDF() {
             const element = document.getElementById('print-area');
-            html2pdf().set({
+            const opt = {
                 margin: 0,
                 filename: document.getElementById('inName').value + '_Marksheet.pdf',
-                html2canvas: { scale: 3, useCORS: true, y: 0 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: 'avoid-all' }
-            }).from(element).save();
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 3, y: 0, scrollY: 0 }, // Forces top alignment
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
         }
     </script>
 </body>
