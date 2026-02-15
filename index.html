@@ -104,18 +104,28 @@
         }
 
         function calculate() {
-            let subjects = ['Assam', 'Math', 'GK', 'Drawing'];
-            let fm = parseFloat(document.getElementById('inFullMark').value) || 50;
-            let total = 0;
-            subjects.forEach(sub => {
-                let val = parseFloat(document.getElementById('m' + sub).value) || 0;
-                document.getElementById('r' + sub).innerText = toAssamese(val);
-                document.getElementById('w' + sub).innerText = toAssamese((val * 20 / fm).toFixed(1));
-                total += val;
-            });
-            document.getElementById('totalObtained').innerText = toAssamese(total);
-            document.getElementById('totalWeight').innerText = toAssamese((total * 20 / (fm * 4)).toFixed(1));
-        }
+    let subjects = ['Assam', 'Math', 'GK', 'Drawing'];
+    let fm = parseFloat(document.getElementById('inFullMark').value) || 50; // প্ৰতি বিষয়ৰ মুঠ নম্বৰ
+    let totalObtained = 0;
+    
+    subjects.forEach(sub => {
+        let val = parseFloat(document.getElementById('m' + sub).value) || 0;
+        document.getElementById('r' + sub).innerText = toAssamese(val);
+        
+        // ২০% ৰ শুদ্ধ ফৰ্মূলা: (প্ৰাপ্ত নম্বৰ / মুঠ নম্বৰ) * ২০
+        let weightage = (val / fm) * 20; 
+        document.getElementById('w' + sub).innerText = toAssamese(weightage.toFixed(1));
+        
+        totalObtained += val;
+    });
+
+    let totalFull = fm * 4;
+    document.getElementById('totalObtained').innerText = toAssamese(totalObtained);
+    
+    // মুঠ ২০% ৰ শুদ্ধ ফৰ্মূলা
+    let totalWeight = (totalObtained / totalFull) * 20;
+    document.getElementById('totalWeight').innerText = toAssamese(totalWeight.toFixed(1));
+}
 
         function updateAndSave() {
             // এতিয়া ইয়াতে সকলো হেডাৰ আপডেট কৰা হৈছে
