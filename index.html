@@ -7,44 +7,44 @@
     <style>
         body { font-family: 'Hind Siliguri', sans-serif; background-color: #f0f0f0; margin: 0; padding: 10px; }
         .no-print { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 800px; margin-left: auto; margin-right: auto; }
-        .page-container { background: white; width: 210mm; height: 296mm; padding: 20mm; margin: 0 auto; box-sizing: border-box; overflow: hidden; }
-        .marksheet-content { width: 100%; border: 1px solid black; padding: 20px; height: 100%; box-sizing: border-box; position: relative; }
+        
+        /* A4 Page Styling */
+        .page-container { background: white; width: 210mm; min-height: 297mm; padding: 10mm; margin: 0 auto; box-sizing: border-box; display: block; }
+        .marksheet-content { width: 100%; border: 1px solid black; padding: 20px; box-sizing: border-box; min-height: 270mm; }
+        
         h2, h3, h4 { margin: 5px; text-align: center; }
         .student-details { text-align: left; margin-top: 30px; font-weight: bold; line-height: 2; }
         table { width: 100%; border-collapse: collapse; margin-top: 30px; }
         th, td { border: 1px solid black; padding: 12px; text-align: center; font-size: 18px; }
-        input { margin-bottom: 8px; padding: 8px; width: 100%; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input { margin-bottom: 8px; padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         .btn-group { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; }
-        button { padding: 10px; flex: 1; min-width: 120px; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; color: white; }
+        button { padding: 12px; flex: 1; min-width: 120px; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; color: white; }
         .btn-update { background: #2196F3; }
-        .btn-fetch { background: #FF9800; }
         .btn-download { background: #4CAF50; }
-        @media print { .no-print { display: none; } .page-container { margin: 0; border: none; height: 297mm; } }
     </style>
 </head>
 <body>
 
     <div class="no-print">
         <h3>মাৰ্কশ্বীট কন্ট্ৰ’ল পেনেল</h3>
-        <input type="text" id="inSchool" placeholder="স্কুলৰ নাম" value="নিকেতনৰ নাম">
+        <input type="text" id="inSchool" placeholder="স্কুলৰ নাম" value="শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও">
         <div style="display: flex; gap: 5px;">
-            <input type="text" id="inExam" placeholder="পৰীক্ষা আৰু চন" value="পৰীক্ষা আৰু চন">
-            <input type="text" id="inClass" placeholder="শ্ৰেণী" value="শ্ৰেণীৰ নাম">
+            <input type="text" id="inExam" placeholder="পৰীক্ষা আৰু চন" value="প্ৰথম গোট পৰীক্ষা – ২০২৬">
+            <input type="text" id="inClass" placeholder="শ্ৰেণী" value="অংকুৰ">
         </div>
         <div style="display: flex; gap: 5px;">
             <input type="text" id="inName" placeholder="ছাত্ৰৰ সম্পূৰ্ণ নাম">
             <input type="text" id="inRoll" placeholder="ৰোল নং">
         </div>
-        <input type="number" id="inFullMark" placeholder="মুঠ নম্বৰ (যেনে: ৫০)">
+        <input type="number" id="inFullMark" placeholder="প্ৰতি বিষয়ৰ মুঠ নম্বৰ (যেনে: ৫০)" oninput="updateFullMarks()">
         <div style="display: flex; gap: 5px;">
-            <input type="number" id="mAssam" placeholder="অসমীয়া">
-            <input type="number" id="mMath" placeholder="গণিত">
-            <input type="number" id="mGK" placeholder="সাধাৰণ জ্ঞান">
-            <input type="number" id="mDrawing" placeholder="ছবি">
+            <input type="number" id="mAssam" placeholder="অসমীয়া" oninput="calculate()">
+            <input type="number" id="mMath" placeholder="গণিত" oninput="calculate()">
+            <input type="number" id="mGK" placeholder="সাঃ জ্ঞান" oninput="calculate()">
+            <input type="number" id="mDrawing" placeholder="ছবি" oninput="calculate()">
         </div>
         <div class="btn-group">
             <button class="btn-update" onclick="updateAndSave()">Update & Save to Sheet</button>
-            <button class="btn-fetch" onclick="fetchStudentData()">Fetch Student Data</button>
             <button class="btn-download" onclick="downloadPDF()">Download PDF</button>
         </div>
     </div>
@@ -60,37 +60,36 @@
             </div>
             <table>
                 <tr><th>বিষয়</th><th>মুঠ নম্বৰ</th><th>প্ৰাপ্ত নম্বৰ</th><th>২০%</th></tr>
-                <tr><td>অসমীয়া</td><td class="fm">৫০</td><td id="rAssam"></td><td id="wAssam"></td></tr>
-                <tr><td>গণিত</td><td class="fm">৫০</td><td id="rMath"></td><td id="wMath"></td></tr>
-                <tr><td>সাধাৰণ জ্ঞান</td><td class="fm">৫০</td><td id="rGK"></td><td id="wGK"></td></tr>
-                <tr><td>ছবি</td><td class="fm">৫০</td><td id="rDrawing"></td><td id="wDrawing"></td></tr>
+                <tr><td>অসমীয়া</td><td class="fm-cell">৫০</td><td id="rAssam"></td><td id="wAssam"></td></tr>
+                <tr><td>গণিত</td><td class="fm-cell">৫০</td><td id="rMath"></td><td id="wMath"></td></tr>
+                <tr><td>সাধাৰণ জ্ঞান</td><td class="fm-cell">৫০</td><td id="rGK"></td><td id="wGK"></td></tr>
+                <tr><td>ছবি</td><td class="fm-cell">৫০</td><td id="rDrawing"></td><td id="wDrawing"></td></tr>
                 <tr style="font-weight: bold;"><td>মুঠ</td><td id="totalFull">২০০</td><td id="totalObtained"></td><td id="totalWeight"></td></tr>
             </table>
         </div>
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzCYIYaLvaqLFAaR_whQfKVy9bn_v5vCB9gdG3tby92pJKFbWFzgNmUtYJcJ2foWe4/exec'; // ইয়াত আপোনাৰ Web App URL টো পেষ্ট কৰিব
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzCYIYaLvaqLFAaR_whQfKVy9bn_v5vCB9gdG3tby92pJKFbWFzgNmUtYJcJ2foWe4/exec';
 
         function toAssamese(num) {
-            if (num === "" || num === null || undefined) return "";
+            if (num === "" || num === null || num === undefined) return "";
             const dict = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯','.' : '.'};
             return num.toString().split('').map(d => dict[d] || d).join('');
         }
 
-        function updateAndSave() {
-            let name = document.getElementById('inName').value;
-            let roll = document.getElementById('inRoll').value;
-            if(!name || !roll) { alert("নাম আৰু ৰোল নং লিখক"); return; }
+        function updateFullMarks() {
+            let fm = document.getElementById('inFullMark').value || 50;
+            let cells = document.getElementsByClassName('fm-cell');
+            for(let cell of cells) { cell.innerText = toAssamese(fm); }
+            document.getElementById('totalFull').innerText = toAssamese(fm * 4);
+            calculate();
+        }
 
-            // প্রিভিউ আপডেট
-            document.getElementById('outSchool').innerText = document.getElementById('inSchool').value;
-            document.getElementById('outName').innerText = name;
-            document.getElementById('outRoll').innerText = toAssamese(roll);
-            
+        function calculate() {
+            let subjects = ['Assam', 'Math', 'GK', 'Drawing'];
             let fm = parseFloat(document.getElementById('inFullMark').value) || 50;
             let total = 0;
-            let subjects = ['Assam', 'Math', 'GK', 'Drawing'];
             
             subjects.forEach(sub => {
                 let val = parseFloat(document.getElementById('m' + sub).value) || 0;
@@ -99,28 +98,47 @@
                 total += val;
             });
 
-            // গুগল শ্বীটত ডাটা জমা কৰা
+            document.getElementById('totalObtained').innerText = toAssamese(total);
+            document.getElementById('totalWeight').innerText = toAssamese((total * 20 / (fm * 4)).toFixed(1));
+        }
+
+        function updateAndSave() {
+            let name = document.getElementById('inName').value;
+            let roll = document.getElementById('inRoll').value;
+            if(!name || !roll) { alert("নাম আৰু ৰোল নং লিখক"); return; }
+
+            document.getElementById('outName').innerText = name;
+            document.getElementById('outRoll').innerText = toAssamese(roll);
+            document.getElementById('outSchool').innerText = document.getElementById('inSchool').value;
+
+            let fm = document.getElementById('inFullMark').value || 50;
+            let mAssam = document.getElementById('mAssam').value || 0;
+            let mMath = document.getElementById('mMath').value || 0;
+            let mGK = document.getElementById('mGK').value || 0;
+            let mDrawing = document.getElementById('mDrawing').value || 0;
+            let total = parseFloat(mAssam) + parseFloat(mMath) + parseFloat(mGK) + parseFloat(mDrawing);
+
             fetch(scriptURL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({name: name, roll: roll, className: document.getElementById('inClass').value, fullMarks: fm, obtained: total})
-            }).then(() => alert("Data Saved to Google Sheet!"));
+                body: JSON.stringify({
+                    name: name, roll: roll, className: document.getElementById('inClass').value, 
+                    fullMarks: fm, obtained: total, 
+                    mAssam: mAssam, mMath: mMath, mGK: mGK, mDrawing: mDrawing
+                })
+            }).then(() => alert("Data Saved Successfully!"));
         }
 
         function downloadPDF() {
             const element = document.getElementById('print-area');
             html2pdf().set({
                 margin: 0,
-                filename: document.getElementById('inName').value + '.pdf',
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                filename: document.getElementById('inName').value + '_Marksheet.pdf',
+                html2canvas: { scale: 3, useCORS: true, y: 0 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: 'avoid-all' }
             }).from(element).save();
-        }
-
-        // এজন ছাত্ৰৰ ডাটা বিচাৰি উলিওৱা
-        async function fetchStudentData() {
-            alert("Fetch function requires additional GET setup in Apps Script. For now, please input marks manually.");
         }
     </script>
 </body>
