@@ -8,11 +8,10 @@
         body { font-family: 'Hind Siliguri', sans-serif; background-color: #f0f0f0; margin: 0; padding: 10px; }
         .no-print { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 800px; margin-left: auto; margin-right: auto; }
         
-        /* A4 Page Formatting - Fixed for Single Page */
         .page-container { 
             background: white; 
             width: 210mm; 
-            height: 296mm; /* Strictly A4 height to avoid 2nd page */
+            height: 296mm; 
             padding: 10mm; 
             margin: 0 auto; 
             box-sizing: border-box; 
@@ -24,7 +23,7 @@
             border: 2px solid black; 
             padding: 20px; 
             box-sizing: border-box; 
-            height: 100%; /* Ensures it fills the container from top */
+            height: 100%;
         }
         
         h2, h3, h4 { margin: 5px; text-align: center; }
@@ -71,6 +70,7 @@
             <h2 id="outSchool">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</h2>
             <h3 id="outExam">প্ৰথম গোট পৰীক্ষা – ২০২৬</h3>
             <h4 id="outClass">শ্ৰেণীঃ – অংকুৰ</h4>
+            
             <div class="student-details">
                 <p>ছাত্ৰ/ছাত্ৰীৰ নামঃ <span id="outName">................................</span></p>
                 <p>ৰোল নংঃ <span id="outRoll">................</span></p>
@@ -87,7 +87,6 @@
     </div>
 
     <script>
-        // আপুনি দিয়া নতুন URL
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyEbgC9BcDrJVrCJKbYauqAHvg_2vJF6aziHRugGezV7t6caFo7JP5FVhwIfzJaOnSK/exec';
 
         function toAssamese(num) {
@@ -119,6 +118,11 @@
         }
 
         function updateAndSave() {
+            // এতিয়া ইয়াতে সকলো হেডাৰ আপডেট কৰা হৈছে
+            document.getElementById('outSchool').innerText = document.getElementById('inSchool').value;
+            document.getElementById('outExam').innerText = document.getElementById('inExam').value;
+            document.getElementById('outClass').innerText = "শ্ৰেণীঃ – " + document.getElementById('inClass').value;
+            
             let name = document.getElementById('inName').value;
             let roll = document.getElementById('inRoll').value;
             if(!name || !roll) { alert("নাম আৰু ৰোল নং লিখক"); return; }
@@ -148,13 +152,11 @@
             }).then(() => alert("Data Saved Successfully!"));
         }
 
-        // Fetch Data Function - Requires doGet in Apps Script
         function fetchStudentData() {
             let name = document.getElementById('inName').value;
             let roll = document.getElementById('inRoll').value;
             if(!name || !roll) { alert("নাম আৰু ৰোল নং দিয়াটো বাধ্যতামূলক"); return; }
             
-            alert("Fetching data for: " + name + " (Roll: " + roll + ")");
             fetch(scriptURL + "?name=" + name + "&roll=" + roll)
             .then(res => res.json())
             .then(data => {
@@ -164,12 +166,12 @@
                     document.getElementById('mMath').value = data.mMath;
                     document.getElementById('mGK').value = data.mGK;
                     document.getElementById('mDrawing').value = data.mDrawing;
-                    updateFullMarks();
+                    updateAndSave(); // এইটোৱে সকলোবোৰ আপডেট কৰি দিব
                     alert("Data Loaded!");
                 } else {
                     alert("Student not found!");
                 }
-            }).catch(e => alert("Error or Fetch not configured in Script"));
+            }).catch(e => alert("Error: Fetch function might not be configured in Script"));
         }
 
         function downloadPDF() {
@@ -178,7 +180,7 @@
                 margin: 0,
                 filename: document.getElementById('inName').value + '_Marksheet.pdf',
                 image: { type: 'jpeg', quality: 1 },
-                html2canvas: { scale: 3, y: 0, scrollY: 0 }, // Forces top alignment
+                html2canvas: { scale: 3, y: 0, scrollY: 0 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             html2pdf().set(opt).from(element).save();
