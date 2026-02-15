@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="as">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নিকেতন মাৰ্কশ্বীট জেনেৰেটৰ</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: #f4f4f4; }
+        .form-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+        h2 { text-align: center; color: #2c3e50; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; margin-top: 20px; background-color: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #219150; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>নিকেতন মাৰ্কশ্বীট এন্ট্ৰি</h2>
+    
+    <label>ছাত্ৰ/ছাত্ৰীৰ নাম:</label>
+    <input type="text" id="name" placeholder="নাম লিখক">
+    
+    <label>ৰোল নং:</label>
+    <input type="number" id="roll" placeholder="ৰোল লিখক">
+    
+    <hr>
+    <h4>নম্বৰ ভৰাওক (প্ৰতিটো ১০০ ৰ ভিতৰত):</h4>
+    
+    <label>অসমীয়া:</label>
+    <input type="number" id="as" oninput="calculateWeightage('as', 'as20')">
+    <span id="as20">২০%: 0</span>
+    
+    <label>গণিত:</label>
+    <input type="number" id="math" oninput="calculateWeightage('math', 'math20')">
+    <span id="math20">২০%: 0</span>
+    
+    <label>সাধাৰণ জ্ঞান:</label>
+    <input type="number" id="gk" oninput="calculateWeightage('gk', 'gk20')">
+    <span id="gk20">২০%: 0</span>
+    
+    <label>ছবি:</label>
+    <input type="number" id="drawing" oninput="calculateWeightage('drawing', 'drawing20')">
+    <span id="drawing20">২০%: 0</span>
+
+    <button onclick="submitData()">Submit & Download PDF</button>
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzCYIYaLvaqLFAaR_whQfKVy9bn_v5vCB9gdG3tby92pJKFbWFzgNmUtYJcJ2foWe4/exec';
+
+    function calculateWeightage(inputId, spanId) {
+        let val = document.getElementById(inputId).value;
+        let weight = val ? (val * 0.2).toFixed(2) : 0;
+        document.getElementById(spanId).innerText = "২০%: " + weight;
+    }
+
+    function submitData() {
+        const name = document.getElementById('name').value;
+        const roll = document.getElementById('roll').value;
+        
+        // আমি এজন ছাত্ৰৰ ডাটা একেলগে পঠাম
+        const subjects = [
+            { sub: 'অসমীয়া', mark: document.getElementById('as').value },
+            { sub: 'গণিত', mark: document.getElementById('math').value },
+            { sub: 'সাধাৰণ জ্ঞান', mark: document.getElementById('gk').value },
+            { sub: 'ছবি', mark: document.getElementById('drawing').value }
+        ];
+
+        subjects.forEach(item => {
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    name: name,
+                    roll: roll,
+                    className: 'অংকুৰ',
+                    subject: item.sub,
+                    fullMarks: 100,
+                    obtained: item.mark,
+                    weightage: (item.mark * 0.2).toFixed(2)
+                })
+            });
+        });
+
+        generatePDF(name, roll, subjects);
+        alert("ডাটা ছেভ কৰা হৈছে আৰু PDF ৰেডী হৈছে!");
+    }
+
+    function generatePDF(name, roll, subjects) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        doc.setFontSize(16);
+        doc.text("শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও", 105, 20, { align: "center" });
+        doc.setFontSize(14);
+        doc.text("প্ৰথম গোট পৰীক্ষা – ২০২৬", 105, 30, { align: "center" });
+        doc.text("শ্ৰেণীঃ – অংকুৰ", 105, 40, { align: "center" });
+        
+        doc.setFontSize(12);
+        doc.text("ছাত্ৰ/ছাত্ৰীৰ নামঃ " + name, 20, 60);
+        doc.text("ৰোল নংঃ " + roll, 20, 70);
+        
+        // টেবুলখন (সাধাৰণভাৱে ড্ৰয়িং কৰা হৈছে)
+        doc.rect(20, 80, 170, 60); // Outline
+        doc.line(20, 90, 190, 90); // Header line
+        doc.text("বিষয়", 25, 87);
+        doc.text("মুঠ নম্বৰ", 80, 87);
+        doc.text("প্ৰাপ্ত নম্বৰ", 120, 87);
+        doc.text("২০%", 160, 87);
+        
+        let y = 100;
+        let totalObtained = 0;
+        let total20 = 0;
+        
+        subjects.forEach(s => {
+            doc.text(s.sub, 25, y);
+            doc.text("100", 85, y);
+            doc.text(s.mark.toString(), 125, y);
+            let w = (s.mark * 0.2).toFixed(2);
+            doc.text(w.toString(), 165, y);
+            totalObtained += Number(s.mark);
+            total20 += Number(w);
+            y += 10)
+        });
+        
+        doc.line(20, 130, 190, 130);
+        doc.text("মুঠ", 25, 137);
+        doc.text("400", 85, 137);
+        doc.text(totalObtained.toString(), 125, 137);
+        doc.text(total20.toFixed(2).toString(), 165, 137);
+        
+        doc.save(name + "_Marksheet.pdf");
+    }
+</script>
+
+</body>
+</html>
