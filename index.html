@@ -5,110 +5,146 @@
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        body { font-family: 'Hind Siliguri', sans-serif; padding: 10px; background-color: #f4f4f4; }
-        .edit-section { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .marksheet-preview { background: white; border: 1px solid black; padding: 25px; width: 100%; max-width: 700px; margin: 0 auto; box-sizing: border-box; }
+        body { font-family: 'Hind Siliguri', sans-serif; background-color: #f0f0f0; margin: 0; padding: 10px; }
+        .no-print { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 800px; margin-left: auto; margin-right: auto; }
+        
+        /* A4 Page Container */
+        .page-container { 
+            background: white; 
+            width: 210mm; 
+            min-height: 297mm; 
+            padding: 20mm; 
+            margin: 0 auto; 
+            box-sizing: border-box; 
+            border: 1px solid #ddd;
+        }
+
+        .marksheet-content { width: 100%; border: 1px solid black; padding: 20px; min-height: 250mm; box-sizing: border-box; position: relative; }
+        
         h2, h3, h4 { margin: 5px; text-align: center; }
-        .student-details { text-align: left; margin-top: 20px; font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid black; padding: 10px; text-align: center; }
+        .student-details { text-align: left; margin-top: 30px; font-weight: bold; line-height: 2; }
+        table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+        th, td { border: 1px solid black; padding: 12px; text-align: center; font-size: 18px; }
+        
         input { margin-bottom: 8px; padding: 8px; width: 100%; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        button { padding: 10px; flex: 1; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; }
+        button { padding: 12px; flex: 1; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; font-size: 16px; }
         .btn-update { background: #2196F3; color: white; }
         .btn-download { background: #4CAF50; color: white; }
-        @media print { .edit-section { display: none; } .marksheet-preview { border: none; } }
+        
+        @media print { .no-print { display: none; } .page-container { margin: 0; border: none; } }
     </style>
 </head>
 <body>
 
-    <div class="edit-section">
-        <h3>মাৰ্কশ্বীট এডিটৰ (Input)</h3>
-        <input type="text" id="inSchool" placeholder="স্কুলৰ নাম" value="শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও">
-        <input type="text" id="inExam" placeholder="পৰীক্ষা আৰু চন" value="প্ৰথম গোট পৰীক্ষা – ২০২৬">
-        <input type="text" id="inClass" placeholder="শ্ৰেণী" value="অংকুৰ">
+    <div class="no-print">
+        <h3>মাৰ্কশ্বীট নিয়ন্ত্ৰণ (Input)</h3>
+        <div style="display: flex; gap: 5px;">
+            <input type="text" id="inSchool" placeholder="স্কুলৰ নাম" value="শংকৰদেৱ শিশু নিকেতন, ভূরারাও">
+            <input type="text" id="inExam" placeholder="পৰীক্ষা আৰু চন" value="প্ৰথম গোট পৰীক্ষা – ২০২৬">
+        </div>
+        <div style="display: flex; gap: 5px;">
+            <input type="text" id="inClass" placeholder="শ্ৰেণী" value="অংকুৰ">
+            <input type="number" id="inFullMark" placeholder="মুঠ নম্বৰ (যেনে: ৫০ বা ১০০)" oninput="updateFullMarks()">
+        </div>
         <input type="text" id="inName" placeholder="ছাত্ৰ/ছাত্ৰীৰ নাম">
         <input type="text" id="inRoll" placeholder="ৰোল নং">
         
         <div style="display: flex; gap: 5px;">
-            <input type="number" id="mAssam" placeholder="অসমীয়া নম্বৰ" oninput="calculateTotal()">
-            <input type="number" id="mMath" placeholder="গণিত নম্বৰ" oninput="calculateTotal()">
-        </div>
-        <div style="display: flex; gap: 5px;">
-            <input type="number" id="mGK" placeholder="সাঃ জ্ঞান নম্বৰ" oninput="calculateTotal()">
-            <input type="number" id="mDrawing" placeholder="ছবি নম্বৰ" oninput="calculateTotal()">
+            <input type="number" id="mAssam" placeholder="অসমীয়া নম্বৰ" oninput="calculate()">
+            <input type="number" id="mMath" placeholder="গণিত নম্বৰ" oninput="calculate()">
+            <input type="number" id="mGK" placeholder="সাঃ জ্ঞান নম্বৰ" oninput="calculate()">
+            <input type="number" id="mDrawing" placeholder="ছবি নম্বৰ" oninput="calculate()">
         </div>
 
         <div class="btn-group">
-            <button class="btn-update" onclick="updateMarksheet()">Update Preview</button>
-            <button class="btn-download" onclick="downloadPDF()">Download PDF</button>
+            <button class="btn-update" onclick="updatePreview()">Update Preview</button>
+            <button class="btn-download" onclick="downloadPDF()">Download A4 PDF</button>
         </div>
     </div>
 
-    <div id="marksheet-pdf" class="marksheet-preview">
-        <h2 id="outSchool">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</h2>
-        <h3 id="outExam">প্ৰথম গোট পৰীক্ষা – ২০২৬</h3>
-        <h4 id="outClass">শ্ৰেণীঃ – অংকুৰ</h4>
-        
-        <div class="student-details">
-            <p>ছাত্ৰ/ছাত্ৰীৰ নামঃ <span id="outName">................................</span></p>
-            <p>ৰোল নংঃ <span id="outRoll">................</span></p>
-        </div>
+    <div id="print-area" class="page-container">
+        <div class="marksheet-content">
+            <h2 id="outSchool">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</h2>
+            <h3 id="outExam">প্ৰথম গোট পৰীক্ষা – ২০২৬</h3>
+            <h4 id="outClass">শ্ৰেণীঃ – অংকুৰ</h4>
+            
+            <div class="student-details">
+                <p>ছাত্ৰ/ছাত্ৰীৰ নামঃ <span id="outName">................................</span></p>
+                <p>ৰোল নংঃ <span id="outRoll">................</span></p>
+            </div>
 
-        <table>
-            <tr>
-                <th>বিষয়</th>
-                <th>মুঠ নম্বৰ</th>
-                <th>প্ৰাপ্ত নম্বৰ</th>
-                <th>২০%</th>
-            </tr>
-            <tr><td>অসমীয়া</td><td>৫০</td><td id="rAssam"></td><td id="wAssam"></td></tr>
-            <tr><td>গণিত</td><td>৫০</td><td id="rMath"></td><td id="wMath"></td></tr>
-            <tr><td>সাধাৰণ জ্ঞান</td><td>৫০</td><td id="rGK"></td><td id="wGK"></td></tr>
-            <tr><td>ছবি</td><td>৫০</td><td id="rDrawing"></td><td id="wDrawing"></td></tr>
-            <tr style="font-weight: bold;">
-                <td>মুঠ</td>
-                <td id="totalFull">২০০</td>
-                <td id="totalObtained"></td>
-                <td id="totalWeight"></td>
-            </tr>
-        </table>
+            <table>
+                <tr>
+                    <th>বিষয়</th>
+                    <th>মুঠ নম্বৰ</th>
+                    <th>প্ৰাপ্ত নম্বৰ</th>
+                    <th>২০%</th>
+                </tr>
+                <tr><td>অসমীয়া</td><td class="fm">৫০</td><td id="rAssam"></td><td id="wAssam"></td></tr>
+                <tr><td>গণিত</td><td class="fm">৫০</td><td id="rMath"></td><td id="wMath"></td></tr>
+                <tr><td>সাধাৰণ জ্ঞান</td><td class="fm">৫০</td><td id="rGK"></td><td id="wGK"></td></tr>
+                <tr><td>ছবি</td><td class="fm">৫০</td><td id="rDrawing"></td><td id="wDrawing"></td></tr>
+                <tr style="font-weight: bold;">
+                    <td>মুঠ</td>
+                    <td id="totalFull">২০০</td>
+                    <td id="totalObtained"></td>
+                    <td id="totalWeight"></td>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <script>
-        function updateMarksheet() {
+        // ইংৰাজীৰ পৰা অসমীয়া নম্বৰ কৰা ফাংচন
+        function toAssamese(num) {
+            if (num === "" || num === null) return "";
+            const dict = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯','.' : '.'};
+            return num.toString().split('').map(d => dict[d] || d).join('');
+        }
+
+        function updateFullMarks() {
+            let fm = document.getElementById('inFullMark').value || 50;
+            let cells = document.getElementsByClassName('fm');
+            for(let cell of cells) { cell.innerText = toAssamese(fm); }
+            document.getElementById('totalFull').innerText = toAssamese(fm * 4);
+            calculate();
+        }
+
+        function updatePreview() {
             document.getElementById('outSchool').innerText = document.getElementById('inSchool').value;
             document.getElementById('outExam').innerText = document.getElementById('inExam').value;
             document.getElementById('outClass').innerText = "শ্ৰেণীঃ – " + document.getElementById('inClass').value;
             document.getElementById('outName').innerText = document.getElementById('inName').value || "................................";
-            document.getElementById('outRoll').innerText = document.getElementById('inRoll').value || "................";
-            
-            calculateTotal();
+            document.getElementById('outRoll').innerText = toAssamese(document.getElementById('inRoll').value) || "................";
+            calculate();
         }
 
-        function calculateTotal() {
-            let subjects = ['Assam', 'Math', 'GK', 'Drawing'];
+        function calculate() {
+            let subs = ['Assam', 'Math', 'GK', 'Drawing'];
+            let fm = parseFloat(document.getElementById('inFullMark').value) || 50;
             let totalMarks = 0;
             
-            subjects.forEach(sub => {
+            subs.forEach(sub => {
                 let val = parseFloat(document.getElementById('m' + sub).value) || 0;
-                document.getElementById('r' + sub).innerText = val;
-                let weight = (val * 20 / 50).toFixed(1); // ৫০ ৰ ভিতৰত পৰীক্ষা ধৰা হৈছে
-                document.getElementById('w' + sub).innerText = weight;
+                document.getElementById('r' + sub).innerText = toAssamese(val);
+                let weight = (val * 20 / fm).toFixed(1);
+                document.getElementById('w' + sub).innerText = toAssamese(weight);
                 totalMarks += val;
             });
 
-            document.getElementById('totalObtained').innerText = totalMarks;
-            document.getElementById('totalWeight').innerText = (totalMarks * 20 / 200).toFixed(1);
+            document.getElementById('totalObtained').innerText = toAssamese(totalMarks);
+            document.getElementById('totalWeight').innerText = toAssamese((totalMarks * 20 / (fm * 4)).toFixed(1));
         }
 
         function downloadPDF() {
-            const element = document.getElementById('marksheet-pdf');
+            updatePreview();
+            const element = document.getElementById('print-area');
             const opt = {
-                margin: 10,
+                margin: 0,
                 filename: document.getElementById('inName').value + '_Marksheet.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 3, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             html2pdf().set(opt).from(element).save();
