@@ -12,7 +12,6 @@
         .btn-save { width: 100%; padding: 14px; background: #2e7d32; color: white; border: none; font-weight: bold; cursor: pointer; border-radius: 4px; }
         .btn-pdf { width: 100%; padding: 12px; background: #1565c0; color: white; border: none; margin-top: 5px; font-weight: bold; cursor: pointer; border-radius: 4px; }
         
-        /* মাৰ্কশ্বীট ডিজাইন */
         .print-area { display: none; width: 100%; max-width: 550px; margin: 20px auto; padding: 20px; border: 2px solid #000; }
         .school-header { text-align: center; font-size: 20px; font-weight: bold; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
@@ -27,7 +26,7 @@
 
 <div class="no-print">
     <h3 style="text-align:center; margin-top:0;">নম্বৰ এন্ট্ৰি ফৰ্ম</h3>
-    <input type="text" id="inSchool" oninput="sync()" placeholder="বিদ্যালয়ৰ নাম লিখক">
+    <input type="text" id="inSchool" oninput="sync()" placeholder="বিদ্যালয়ৰ নাম লিখক">
     
     <div class="grid-inputs">
         <input type="text" id="inYear" oninput="sync()" placeholder="বৰ্ষ (যেনে: ২০২৬)">
@@ -37,8 +36,8 @@
             <option value="মুকুল">মুকুল</option>
             <option value="প্ৰভাত">প্ৰভাত</option>
             <option value="প্ৰথম">প্ৰথম</option>
-            <option value="দ্বিতীয়">দ্বিতীয়</option>
-            <option value="তৃতীয়">তৃতীয়</option>
+            <option value="দ্বিতীয়">দ্বিতীয়</option>
+            <option value="তৃতীয়">তৃতীয়</option>
             <option value="চতুৰ্থ">চতুৰ্থ</option>
             <option value="পঞ্চম">পঞ্চম</option>
             <option value="ষষ্ঠ">ষষ্ঠ</option>
@@ -48,12 +47,12 @@
     </div>
 
     <select id="inExam" onchange="sync()">
-        <option value="তিনিমাহিলী">তিনিমাহিলী মূল্যায়ন</option>
-        <option value="প্ৰথম গোট">প্ৰথম গোট মূল্যায়ন</option>
-        <option value="ছয়মাহিলী">ছয়মাহিলী মূল্যায়ন</option>
-        <option value="ন-মাহিলী">ন-মাহিলী মূল্যায়ন</option>
-        <option value="দ্বিতীয় গোট">দ্বিতীয় গোট মূল্যায়ন</option>
-        <option value="বছৰেকীয়া">বছৰেকীয়া মূল্যায়ন</option>
+        <option value="তিনিমাহিলী">তিনিমাহিলী মূল্যায়ন</option>
+        <option value="প্ৰথম গোট">প্ৰথম গোট মূল্যায়ন</option>
+        <option value="ছয়মাহিলী">ছয়মাহিলী মূল্যায়ন</option>
+        <option value="ন-মাহিলী">ন-মাহিলী মূল্যায়ন</option>
+        <option value="দ্বিতীয় গোট">দ্বিতীয় গোট মূল্যায়ন</option>
+        <option value="বছৰেকীয়া">বছৰেকীয়া মূল্যায়ন</option>
     </select>
 
     <div class="grid-inputs">
@@ -61,16 +60,15 @@
         <input type="text" id="inName" oninput="sync()" placeholder="ছাত্ৰৰ নাম">
     </div>
     
-    <div id="markInputs" class="grid-inputs">
-        </div>
+    <div id="markInputs" class="grid-inputs"></div>
 
     <button class="btn-save" onclick="send()">গুগল শ্বীটত জমা কৰক</button>
-<button class="btn-pdf" onclick="window.print()">পিডিএফ (PDF) ডাউনলোড</button>
-<button class="btn-pdf" style="background:#ef6c00;" onclick="fetchMarks()">আগৰ নম্বৰ চাওক (View Marks)</button>   
+    <button class="btn-pdf" onclick="window.print()">পিডিএফ (PDF) ডাউনলোড</button>
+    <button class="btn-pdf" style="background:#ef6c00;" onclick="fetchMarks()">আগৰ নম্বৰ চাওক (View Marks)</button>   
 </div>
 
 <div class="print-area">
-    <div class="school-header" id="vSchool">বিদ্যালয়ৰ নাম</div>
+    <div class="school-header" id="vSchool">বিদ্যালয়ৰ নাম</div>
     <p style="text-align:center; font-weight:bold; margin:5px;">বৰ্ষ: <span id="vYear">....</span></p>
     <div style="text-align:center; font-weight:bold; border: 1px solid #000; padding: 5px; background:#f9f9f9;" id="vExam">পৰীক্ষাৰ নাম</div>
     
@@ -82,7 +80,7 @@
 
     <table>
         <thead>
-            <tr><th>বিষয়</th><th>পূৰ্ণ নম্বৰ</th><th>প্ৰাপ্ত নম্বৰ</th><th>শতাংশ (%)</th></tr>
+            <tr><th>বিষয়</th><th>পূৰ্ণ নম্বৰ</th><th>প্ৰাপ্ত নম্বৰ</th><th>শতাংশ (%)</th></tr>
         </thead>
         <tbody id="vBody"></tbody>
         <tfoot>
@@ -108,8 +106,8 @@
         "মুকুল": ["অসমীয়া", "অংক", "ইংৰাজী", "ছবি", "নীতিশিক্ষা"],
         "প্ৰভাত": ["অসমীয়া", "অংক", "ইংৰাজী", "পৰিৱেশ", "ছবি", "নীতিশিক্ষা"],
         "প্ৰথম": ["অসমীয়া", "ইংৰাজী", "গণিত", "পৰিৱেশ", "নীতিশিক্ষা", "ছবি", "সংস্কৃত"],
-        "দ্বিতীয়": ["অসমীয়া", "ইংৰাজী", "গণিত", "পৰিৱেশ", "নীতিশিক্ষা", "ছবি", "সংস্কৃত"],
-        "তৃতীয়": ["অসমীয়া", "ইংৰাজী", "গণিত", "পৰিৱেশ", "নীতিশিক্ষা", "ছবি", "সংস্কৃত"],
+        "দ্বিতীয়": ["অসমীয়া", "ইংৰাজী", "গণিত", "পৰিৱেশ", "নীতিশিক্ষা", "ছবি", "সংস্কৃত"],
+        "তৃতীয়": ["অসমীয়া", "ইংৰাজী", "গণিত", "পৰিৱেশ", "নীতিশিক্ষা", "ছবি", "সংস্কৃত"],
         "default": ["অসমীয়া", "ইংৰাজী", "গণিত", "বিজ্ঞান", "সমাজ বি.", "হিন্দী", "সংস্কৃত", "নীতিশিক্ষা", "পৰিৱেশ", "কম্পিউটাৰ", "ছবি"]
     };
 
@@ -130,7 +128,7 @@
     }
 
     function sync() {
-        document.getElementById('vSchool').innerText = document.getElementById('inSchool').value || "বিদ্যালয়ৰ নাম";
+        document.getElementById('vSchool').innerText = document.getElementById('inSchool').value || "বিদ্যালয়ৰ নাম";
         document.getElementById('vYear').innerText = toAssamese(document.getElementById('inYear').value) || "....";
         document.getElementById('vExam').innerText = document.getElementById('inExam').value;
         document.getElementById('vName').innerText = document.getElementById('inName').value || "........";
@@ -140,7 +138,7 @@
         let exam = document.getElementById('inExam').value;
         let p = 0.20; 
         if(exam=="ছয়মাহিলী" || exam=="ন-মাহিলী") p = 0.30; 
-        if(exam=="বছৰেকীয়া") p = 0.50;
+        if(exam=="বছৰেকীয়া") p = 0.50;
         
         let h = "";
         let totalFull = 0, totalObt = 0, totalPerc = 0;
@@ -149,7 +147,6 @@
             let val = parseFloat(document.getElementById('m' + (i+1)).value) || 0;
             let fullMark = 100;
             
-            // নীতিশিক্ষা আৰু গোট মূল্যায়নৰ নম্বৰ চৰ্ত
             if(s === "নীতিশিক্ষা") {
                 fullMark = (exam.includes("গোট") || exam === "তিনিমাহিলী") ? 25 : 50;
             } else if(exam.includes("গোট") || exam === "তিনিমাহিলী") {
@@ -181,10 +178,9 @@
         .then(() => alert('সফলভাৱে গুগল শ্বীটত জমা হ’ল!'))
         .catch(() => alert('ভুল হৈছে!'));
     }
-    updateSubjects();
-    // আগৰ ফাংচনবোৰৰ শেষত আৰু </script> ৰ ঠিক ওপৰত এইখিনি দিয়ক
+
     function fetchMarks() {
-        const url = 'https://script.google.com/macros/s/AKfycbxchjpj_f-v2Hcnoz2U4N830u5tqF3BOvE-JhYx_F3uP0g4iarxWoaOoym-VFP9p24/exec'; // ইয়াত আপোনাৰ URL টো দিব
+        const url = 'https://script.google.com/macros/s/AKfycbxchjpj_f-v2Hcnoz2U4N830u5tqF3BOvE-JhYx_F3uP0g4iarxWoaOoym-VFP9p24/exec';
         let roll = document.getElementById('inRoll').value;
         let exam = document.getElementById('inExam').value;
         
@@ -198,7 +194,7 @@
             } else {
                 document.getElementById('inName').value = data[1]; 
                 let colIdx = 4; 
-                for(let i=1; i<=11; i++) {
+                for(let i=1; i<=currentSubs.length; i++) {
                     let input = document.getElementById('m'+i);
                     if(input) {
                         input.value = data[colIdx];
@@ -211,7 +207,9 @@
         })
         .catch(err => alert("ডাটা বিচাৰি পোৱাত সমস্যা হৈছে।"));
     }
+    
+    updateSubjects();
 </script>
-</script>
+
 </body>
 </html>
