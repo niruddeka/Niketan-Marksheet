@@ -3,56 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>প্ৰগতি পত্ৰ ২০২৬</title>
+    <title>নিকেতন প্ৰগতি পত্ৰ - ২০২৬</title>
     <style>
-        body { font-family: 'Arial', sans-serif; padding: 10px; }
-        .no-print { background: #f0f0f0; padding: 15px; border-radius: 8px; max-width: 450px; margin: auto; border: 1px solid #ccc; }
-        input, select { width: 100%; padding: 8px; margin: 5px 0 10px 0; border: 1px solid #888; border-radius: 4px; }
-        .btn { width: 100%; padding: 12px; font-weight: bold; cursor: pointer; border: none; border-radius: 4px; color: white; }
-        .save { background: #1b5e20; }
-        .pdf { background: #0d47a1; margin-top: 5px; }
+        body { font-family: 'Arial', sans-serif; padding: 10px; background: #fff; line-height: 1.4; }
+        .no-print { background: #f4f4f4; padding: 15px; border-radius: 8px; border: 1px solid #ccc; max-width: 480px; margin: auto; }
+        input, select { width: 100%; padding: 10px; margin: 5px 0 10px 0; border: 1px solid #888; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .btn-save { width: 100%; padding: 14px; background: #2e7d32; color: white; border: none; font-weight: bold; cursor: pointer; border-radius: 4px; }
+        .btn-pdf { width: 100%; padding: 12px; background: #1565c0; color: white; border: none; margin-top: 5px; font-weight: bold; cursor: pointer; border-radius: 4px; }
         
-        /* মাৰ্কশ্বীট ডিজাইন */
-        .print-area { display: none; width: 100%; max-width: 550px; margin: 20px auto; padding: 20px; border: 2px solid #000; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid black; padding: 6px; text-align: center; }
+        /* মাৰ্কশ্বীট ডিজাইন (১ম গোটৰ সৰল ডিজাইনটো) */
+        .print-area { display: none; width: 100%; max-width: 500px; margin: 20px auto; padding: 20px; border: 2px solid #000; }
+        .school-header { text-align: center; font-size: 20px; font-weight: bold; text-transform: uppercase; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: center; }
+        .sub-name { text-align: left; padding-left: 10px; font-weight: bold; }
         @media print { .no-print { display: none; } .print-area { display: block; } }
     </style>
 </head>
 <body>
 
 <div class="no-print">
-    <h3 style="text-align:center;">নম্বৰ এন্ট্ৰি ফৰ্ম</h3>
-    <input type="text" id="inSchool" oninput="sync()" placeholder="বিদ্যালয়ৰ নাম">
-    <select id="inExam" onchange="sync()">
-        <option value="প্ৰথম গোট">১ম গোট (২০%)</option>
-        <option value="ছয় মাহিলী">৬ মাহিলী (৩০%)</option>
-        <option value="বছৰেকীয়া">বছৰেকীয়া (৫০%)</option>
-    </select>
-    <input type="number" id="inRoll" oninput="sync()" placeholder="ৰোল নং">
-    <input type="text" id="inName" oninput="sync()" placeholder="ছাত্ৰৰ নাম">
+    <h3 style="text-align:center; margin-top:0;">নম্বৰ এন্ট্ৰি ফৰ্ম (২০২৬)</h3>
+    <input type="text" id="inSchool" oninput="sync()" placeholder="বিদ্যালয়ৰ নাম লিখক">
     
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+    <div class="grid-inputs">
+        <select id="inClass" onchange="sync()">
+            <option value="">শ্ৰেণী বাছি লওক</option>
+            <option value="অংকুৰ">অংকুৰ</option><option value="মুকুল">মুকুল</option>
+            <option value="প্ৰভাত">প্ৰভাত</option><option value="প্ৰথম">প্ৰথম</option>
+            <option value="দ্বিতীয়">দ্বিতীয়</option><option value="তৃতীয়">তৃতীয়</option>
+            <option value="চতুৰ্থ">চতুৰ্থ</option><option value="পঞ্চম">পঞ্চম</option>
+            <option value="ষষ্ঠ">ষষ্ঠ</option><option value="সপ্তম">সপ্তম</option>
+            <option value="অষ্টম">অষ্টম</option>
+        </select>
+
+        <select id="inExam" onchange="sync()">
+            <option value="তিনিমাহিলী">তিনিমাহিলী মূল্যায়ন</option>
+            <option value="প্ৰথম গোট">প্ৰথম গোট মূল্যায়ন</option>
+            <option value="ছয়মাহিলী">ছয়মাহিলী মূল্যায়ন</option>
+            <option value="ন-মাহিলী">ন-মাহিলী মূল্যায়ন</option>
+            <option value="দ্বিতীয় গোট">দ্বিতীয় গোট মূল্যায়ন</option>
+            <option value="বছৰেকীয়া">বছৰেকীয়া মূল্যায়ন</option>
+        </select>
+    </div>
+
+    <div class="grid-inputs">
+        <input type="number" id="inRoll" oninput="sync()" placeholder="ৰোল নম্বৰ">
+        <input type="text" id="inName" oninput="sync()" placeholder="ছাত্ৰৰ নাম">
+    </div>
+    
+    <label style="font-weight:bold; color:#d35400;">বিষয়সমূহৰ নম্বৰ ভৰাওক:</label>
+    <div class="grid-inputs">
         <input type="number" id="m1" oninput="sync()" placeholder="অসমীয়া">
         <input type="number" id="m2" oninput="sync()" placeholder="ইংৰাজী">
         <input type="number" id="m3" oninput="sync()" placeholder="গণিত">
         <input type="number" id="m4" oninput="sync()" placeholder="হিন্দী">
         <input type="number" id="m5" oninput="sync()" placeholder="বিজ্ঞান">
         <input type="number" id="m6" oninput="sync()" placeholder="সমাজ বি.">
+        <input type="number" id="m7" oninput="sync()" placeholder="সংস্কৃত">
+        <input type="number" id="m8" oninput="sync()" placeholder="নীতিশিক্ষা">
+        <input type="number" id="m9" oninput="sync()" placeholder="পৰিৱেশ">
+        <input type="number" id="m10" oninput="sync()" placeholder="কম্পিউটাৰ">
+        <input type="number" id="m11" oninput="sync()" placeholder="ছবি/অংকন">
     </div>
 
-    <button class="save" onclick="send()">শ্বীটত জমা কৰক</button>
-    <button class="pdf" onclick="window.print()">পিডিএফ (PDF) কৰক</button>
+    <button class="btn-save" onclick="send()">গুগল শ্বীটত জমা কৰক</button>
+    <button class="btn-pdf" onclick="window.print()">পিডিএফ (PDF) ডাউনলোড</button>
 </div>
 
 <div class="print-area">
-    <h2 style="text-align:center;" id="vSchool">বিদ্যালয়ৰ নাম</h2>
-    <h4 style="text-align:center;"><span id="vExam">পৰীক্ষা</span> - ২০২৬</h4>
-    <p>নাম: <span id="vName">........</span> | ৰোল: <span id="vRoll">..</span></p>
+    <div class="school-header" id="vSchool">বিদ্যালয়ৰ নাম</div>
+    <p style="text-align:center; font-weight:bold; margin:5px;">বৰ্ষ: ২০২৬</p>
+    <div style="text-align:center; font-weight:bold; border: 1px solid #000; padding: 5px; background:#f0f0f0;" id="vExam">পৰীক্ষাৰ নাম</div>
+    
+    <div style="display:flex; justify-content:space-between; margin-top:15px; font-weight:bold; border-bottom:1px solid #000; padding-bottom:5px;">
+        <span>নাম: <span id="vName">........</span></span>
+        <span>শ্ৰেণী: <span id="vClass">....</span></span>
+        <span>ৰোল: <span id="vRoll">..</span></span>
+    </div>
+
     <table>
-        <tr><th>বিষয়</th><th>পূৰ্ণ নম্বৰ</th><th>প্ৰাপ্ত নম্বৰ</th><th>শতাংশ (%)</th></tr>
+        <thead>
+            <tr><th>বিষয়</th><th>পূৰ্ণ নম্বৰ</th><th>প্ৰাপ্ত নম্বৰ</th><th>শতাংশ (%)</th></tr>
+        </thead>
         <tbody id="vBody"></tbody>
     </table>
+
+    <div style="margin-top: 60px; display: flex; justify-content: space-between; font-weight: bold;">
+        <div style="border-top: 1px solid #000; width: 150px; text-align: center;">আচাৰ্যৰ স্বাক্ষৰ</div>
+        <div style="border-top: 1px solid #000; width: 180px; text-align: center;">প্ৰধান আচাৰ্যৰ স্বাক্ষৰ</div>
+    </div>
 </div>
 
 <script>
@@ -60,31 +101,35 @@
         document.getElementById('vSchool').innerText = document.getElementById('inSchool').value || "বিদ্যালয়ৰ নাম";
         document.getElementById('vExam').innerText = document.getElementById('inExam').value;
         document.getElementById('vName').innerText = document.getElementById('inName').value || "........";
+        document.getElementById('vClass').innerText = document.getElementById('inClass').value || "....";
         document.getElementById('vRoll').innerText = document.getElementById('inRoll').value || "..";
         
-        let ex = document.getElementById('inExam').value;
-        let p = 0.20; if(ex=="ছয় মাহিলী") p=0.30; if(ex=="বছৰেকীয়া") p=0.50;
+        let exam = document.getElementById('inExam').value;
+        let p = 0.20; 
+        if(exam=="ছয়মাহিলী" || exam=="ন-মাহিলী") p=0.30; 
+        if(exam=="বছৰেকীয়া") p=0.50;
         
-        let subs = ["অসমীয়া", "ইংৰাজী", "গণিত", "হিন্দী", "বিজ্ঞান", "সমাজ বি."];
+        let subs = ["অসমীয়া", "ইংৰাজী", "গণিত", "হিন্দী", "বিজ্ঞান", "সমাজ বি.", "সংস্কৃত", "নীতিশিক্ষা", "পৰিৱেশ", "কম্পিউটাৰ", "ছবি"];
         let h = "";
-        for(let i=1; i<=6; i++) {
+        for(let i=1; i<=11; i++) {
             let val = document.getElementById('m'+i).value || "0";
             let calc = (val * p).toFixed(1);
-            h += `<tr><td>${subs[i-1]}</td><td>১০০</td><td>${val}</td><td>${calc}</td></tr>`;
+            h += `<tr><td class="sub-name">${subs[i-1]}</td><td>১০০</td><td>${val}</td><td>${calc}</td></tr>`;
         }
         document.getElementById('vBody').innerHTML = h;
     }
+
     function send() {
-        const url = 'https://script.google.com/macros/s/AKfycbwrdvRUgl_M8L-ChAC77xcC3u9ccNp-c3hGl-jMiXNLipk7wxvLDFElG1jVqDfD5eYF/exec';
+        const url = 'https://script.google.com/macros/s/AKfycbx9BYSqT6djvWJhKHrsBs4kFS2v7lgPhqPUJCmxy7E35_2X0-ZKZwDp3IHJwYAdNqSy/exec';
         let d = new URLSearchParams();
         d.append("examType", document.getElementById('inExam').value);
         d.append("roll", document.getElementById('inRoll').value);
         d.append("name", document.getElementById('inName').value);
-        for(let i=1; i<=11; i++) {
-            let val = document.getElementById('m'+i) ? document.getElementById('m'+i).value : "0";
-            d.append("m"+i, val);
-        }
-        fetch(url, { method: 'POST', mode: 'no-cors', body: d }).then(() => alert('জমা হ’ল!'));
+        for(let i=1; i<=11; i++) d.append("m"+i, document.getElementById('m'+i).value);
+        
+        fetch(url, { method: 'POST', mode: 'no-cors', body: d })
+        .then(() => alert('সফলভাৱে গুগল শ্বীটত জমা হ’ল!'))
+        .catch(() => alert('ভুল হৈছে! আকৌ চেষ্টা কৰক।'));
     }
     sync();
 </script>
