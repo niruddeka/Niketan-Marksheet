@@ -42,7 +42,7 @@
         <option value="ছয়মাহিলী">ছয়মাহিলী</option>
         <option value="ন-মাহিলী">ন-মাহিলী</option>
         <option value="দ্বিতীয় গোট">দ্বিতীয় গোট</option>
-        <option value="বছৰেকীয়া">বছৰেকীয়া</option>
+        <option value="বছৰেকীয়া">বছৰেকীয়া</option>
     </select>
 
     <div class="grid-inputs">
@@ -108,6 +108,7 @@
     }
 
     function toAssamese(num) {
+        if(num === undefined || num === null) return "";
         const eng = ['0','1','2','3','4','5','6','7','8','9'];
         const asm = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
         return num.toString().split('').map(d => eng.indexOf(d) !== -1 ? asm[eng.indexOf(d)] : d).join('');
@@ -123,8 +124,8 @@
         
         let exam = document.getElementById('inExam').value;
         let p = 0.20; 
-        if(exam=="ছয়মাহিলী" || exam=="ন-মাহিলী") p = 0.30; 
-        if(exam=="বছৰেকীয়া") p = 0.50;
+        if(exam === "ছয়মাহিলী" || exam === "ন-মাহিলী") p = 0.30; 
+        if(exam === "বছৰেকীয়া") p = 0.50; // নিশ্চিত কৰা হ'ল
         
         let h = "";
         let totalFull = 0, totalObt = 0, totalPerc = 0;
@@ -158,7 +159,7 @@
         const url = 'https://script.google.com/macros/s/AKfycbyjbXq1y-NZQk8r4pzcmd0jaZBkc8XXxV_o6dIqRWRu8g7cofsnF3QEvXPdLR-6yVHy/exec';
         let d = new URLSearchParams();
         d.append("examType", document.getElementById('inExam').value);
-        d.append("className", document.getElementById('inClass').value); // শ্ৰেণী যোগ কৰা হ'ল
+        d.append("className", document.getElementById('inClass').value);
         d.append("roll", document.getElementById('inRoll').value);
         d.append("name", document.getElementById('inName').value);
         currentSubs.forEach((s, i) => d.append("m" + (i+1), document.getElementById('m' + (i+1)).value));
@@ -177,10 +178,14 @@
         fetch(url + "?action=fetch&roll=" + roll + "&examType=" + exam)
         .then(res => res.json())
         .then(data => {
-            if(data === "Not Found" || data === "Sheet Not Found") { alert("তথ্য পোৱা নগ’ল।"); } 
-            else {
+            if(data === "Not Found" || data === "Sheet Not Found") { 
+                alert("তথ্য পোৱা নগ’ল।"); 
+            } else {
+                // ডাটা লোড কৰা
                 document.getElementById('inName').value = data[1]; 
-                let colIdx = 4; // Col E (Index 4) ৰ পৰা নম্বৰবোৰ আৰম্ভ হৈছে
+                document.getElementById('inClass').value = data[2];
+                
+                let colIdx = 4; // Col E ৰ পৰা নম্বৰবোৰ আৰম্ভ হৈছে
                 for(let i=1; i<=currentSubs.length; i++) {
                     let input = document.getElementById('m'+i);
                     if(input) { 
@@ -188,8 +193,8 @@
                         colIdx += 2; 
                     }
                 }
-                sync(); 
-                alert("তথ্য লোড হ’ল।");
+                sync(); // ইয়াৰ দ্বাৰা পিডিএফ এৰিয়াটো নিজে নিজেই আপডেত হ'ব
+                alert("তথ্য সফলতাৰে লোড হ’ল। এতিয়া আপুনি পিডিএফ ডাউনলোড বা প্ৰিন্ট কৰিব পাৰিব।");
             }
         })
         .catch(() => alert("গুগল শ্বীটৰ সৈতে সংযোগ হোৱা নাই।"));
