@@ -170,28 +170,32 @@
     }
 
     function fetchMarks() {
-        const url = 'https://script.google.com/macros/s/AKfycbyjbXq1y-NZQk8r4pzcmd0jaZBkc8XXxV_o6dIqRWRu8g7cofsnF3QEvXPdLR-6yVHy/exec';
-        let roll = document.getElementById('inRoll').value;
-        let exam = document.getElementById('inExam').value;
-        if(!roll) { alert("ৰোল নম্বৰ লিখক"); return; }
-        
-        fetch(url + "?action=fetch&roll=" + roll + "&examType=" + exam)
-        .then(res => res.json())
-        .then(data => {
-            if(data === "Not Found" || data === "Sheet Not Found") { 
-                alert("তথ্য পোৱা নগ’ল।"); 
-            } else {
-                // ডাটা লোড কৰা
-                document.getElementById('inName').value = data[1]; 
-                document.getElementById('inClass').value = data[2];
-                
-                let colIdx = 4; // Col E ৰ পৰা নম্বৰবোৰ আৰম্ভ হৈছে
-                for(let i=1; i<=currentSubs.length; i++) {
-                    let input = document.getElementById('m'+i);
-                    if(input) { 
-                        input.value = data[colIdx]; 
-                        colIdx += 2; 
-                    }
+    const url = 'https://script.google.com/macros/s/AKfycbyjbXq1y-NZQk8r4pzcmd0jaZBkc8XXxV_o6dIqRWRu8g7cofsnF3QEvXPdLR-6yVHy/exec';
+    let roll = document.getElementById('inRoll').value;
+    let exam = document.getElementById('inExam').value;
+    if(!roll) { alert("ৰোল নম্বৰ লিখক"); return; }
+    
+    fetch(url + "?roll=" + roll + "&examType=" + exam)
+    .then(res => res.json())
+    .then(data => {
+        if(data === "Not Found" || data === "Sheet Not Found") { 
+            alert("তথ্য পোৱা নগ’ল।"); 
+        } else {
+            // ডাটা ভৰোৱা
+            document.getElementById('inName').value = data[1]; 
+            document.getElementById('inClass').value = data[2];
+            let colIdx = 4;
+            for(let i=1; i<=currentSubs.length; i++) {
+                let input = document.getElementById('m'+i);
+                if(input) { input.value = data[colIdx]; colIdx += 2; }
+            }
+            // পিডিএফ দেখুওৱা আৰু চিধাই প্ৰিণ্ট ডাইলগ খোলা
+            sync(); 
+            setTimeout(() => { window.print(); }, 500); 
+        }
+    })
+    .catch(() => alert("গুগল শ্বীটৰ সৈতে সংযোগ হোৱা নাই।"));
+}
                 }
                 sync(); // ইয়াৰ দ্বাৰা পিডিএফ এৰিয়াটো নিজে নিজেই আপডেত হ'ব
                 alert("তথ্য সফলতাৰে লোড হ’ল। এতিয়া আপুনি পিডিএফ ডাউনলোড বা প্ৰিন্ট কৰিব পাৰিব।");
