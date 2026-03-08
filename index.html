@@ -138,18 +138,13 @@
             } else {
                 let numVal = parseFloat(val) || 0;
                 let fullMark = 100;
-                
                 if(s === "নীতিশিক্ষা" || s === "পৰিৱেশ") {
                     fullMark = (exam.includes("গোট") || exam === "তিনিমাহিলী") ? 25 : 50;
                 } else if(exam.includes("গোট") || exam === "তিনিমাহিলী") {
                     fullMark = 50;
                 }
-
                 let calc = (numVal * p);
-                totalFull += fullMark;
-                totalObt += numVal;
-                totalPerc += calc;
-
+                totalFull += fullMark; totalObt += numVal; totalPerc += calc;
                 h += `<tr><td class="sub-name">${s}</td><td>${toAssamese(fullMark)}</td><td>${toAssamese(numVal)}</td><td>${toAssamese(calc.toFixed(1))}</td></tr>`;
             }
         });
@@ -163,12 +158,14 @@
         const url = 'https://script.google.com/macros/s/AKfycbxchjpj_f-v2Hcnoz2U4N830u5tqF3BOvE-JhYx_F3uP0g4iarxWoaOoym-VFP9p24/exec';
         let d = new URLSearchParams();
         d.append("examType", document.getElementById('inExam').value);
+        d.append("className", document.getElementById('inClass').value); // শ্ৰেণী যোগ কৰা হ'ল
         d.append("roll", document.getElementById('inRoll').value);
         d.append("name", document.getElementById('inName').value);
         currentSubs.forEach((s, i) => d.append("m" + (i+1), document.getElementById('m' + (i+1)).value));
+        
         fetch(url, { method: 'POST', mode: 'no-cors', body: d })
         .then(() => alert('সফলভাৱে জমা হ’ল!'))
-        .catch(() => alert('সংযোগৰ সমস্যা হৈছে।'));
+        .catch(() => alert('ভুল হৈছে!'));
     }
 
     function fetchMarks() {
@@ -177,14 +174,13 @@
         let exam = document.getElementById('inExam').value;
         if(!roll) { alert("ৰোল নম্বৰ লিখক"); return; }
         
-        // action=fetch যোগ কৰা হৈছে যাতে আগৰ নম্বৰ বিচাৰি পায়
         fetch(url + "?action=fetch&roll=" + roll + "&examType=" + exam)
         .then(res => res.json())
         .then(data => {
             if(data === "Not Found" || data === "Sheet Not Found") { alert("তথ্য পোৱা নগ’ল।"); } 
             else {
                 document.getElementById('inName').value = data[1]; 
-                let colIdx = 4; // Col E (Index 4)
+                let colIdx = 4; // Col E (Index 4) ৰ পৰা নম্বৰবোৰ আৰম্ভ হৈছে
                 for(let i=1; i<=currentSubs.length; i++) {
                     let input = document.getElementById('m'+i);
                     if(input) { 
