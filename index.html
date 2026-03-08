@@ -65,7 +65,8 @@
         </div>
 
     <button class="btn-save" onclick="send()">গুগল শ্বীটত জমা কৰক</button>
-    <button class="btn-pdf" onclick="window.print()">পিডিএফ (PDF) ডাউনলোড</button>
+<button class="btn-pdf" onclick="window.print()">পিডিএফ (PDF) ডাউনলোড</button>
+<button class="btn-pdf" style="background:#ef6c00;" onclick="fetchMarks()">আগৰ নম্বৰ চাওক (View Marks)</button>   
 </div>
 
 <div class="print-area">
@@ -181,6 +182,36 @@
         .catch(() => alert('ভুল হৈছে!'));
     }
     updateSubjects();
+    // আগৰ ফাংচনবোৰৰ শেষত আৰু </script> ৰ ঠিক ওপৰত এইখিনি দিয়ক
+    function fetchMarks() {
+        const url = 'আপোনাৰ_WEB_APP_URL_টো_ইয়াত_দিয়ক'; // ইয়াত আপোনাৰ URL টো দিব
+        let roll = document.getElementById('inRoll').value;
+        let exam = document.getElementById('inExam').value;
+        
+        if(!roll) { alert("ৰোল নম্বৰ লিখক"); return; }
+        
+        fetch(url + "?roll=" + roll + "&examType=" + exam)
+        .then(res => res.json())
+        .then(data => {
+            if(data === "Not Found") {
+                alert("এই ৰোল নম্বৰৰ কোনো ডাটা পোৱা নগ’ল।");
+            } else {
+                document.getElementById('inName').value = data[1]; 
+                let colIdx = 4; 
+                for(let i=1; i<=11; i++) {
+                    let input = document.getElementById('m'+i);
+                    if(input) {
+                        input.value = data[colIdx];
+                        colIdx += 2;
+                    }
+                }
+                sync(); 
+                alert("আগৰ নম্বৰবোৰ লোড কৰা হৈছে।");
+            }
+        })
+        .catch(err => alert("ডাটা বিচাৰি পোৱাত সমস্যা হৈছে।"));
+    }
+</script>
 </script>
 </body>
 </html>
