@@ -30,19 +30,19 @@
             <option value="">শ্ৰেণী বাছি লওক</option>
             <option value="অংকুৰ">অংকুৰ</option><option value="মুকুল">মুকুল</option>
             <option value="প্ৰভাত">প্ৰভাত</option>
-            <option value="প্ৰথম">১ম</option><option value="দ্বিতীয়">২য়</option><option value="তৃতীয়">৩য়</option>
+            <option value="প্ৰথম">১ম</option><option value="দ্বিতীয়">২য়</option><option value="তৃতীয়">৩য়</option>
             <option value="চতুৰ্থ">৪ৰ্থ</option><option value="পঞ্চম">৫ম</option>
             <option value="ষষ্ঠ">৬ষ্ঠ</option><option value="সপ্তম">৭ম</option><option value="অষ্টম">৮ম</option>
         </select>
     </div>
 
     <select id="inExam" onchange="sync()">
-        <option value="তিনিমাহিলী">তিনিমাহিলী মূল্যায়ন</option>
-        <option value="প্ৰথম গোট">প্ৰথম গোট মূল্যায়ন</option>
-        <option value="ছয়মাহিলী">ছয়মাহিলী মূল্যায়ন</option>
-        <option value="ন-মাহিলী">ন-মাহিলী মূল্যায়ন</option>
-        <option value="দ্বিতীয় গোট">দ্বিতীয় গোট মূল্যায়ন</option>
-        <option value="বছৰেকীয়া">বছৰেকীয়া মূল্যায়ন</option>
+        <option value="তিনিমাহিলী">তিনিমাহিলী মূল্যায়ন</option>
+        <option value="প্ৰথম গোট">প্ৰথম গোট মূল্যায়ন</option>
+        <option value="ছয়মাহিলী">ছয়মাহিলী মূল্যায়ন</option>
+        <option value="ন-মাহিলী">ন-মাহিলী মূল্যায়ন</option>
+        <option value="দ্বিতীয় গোট">দ্বিতীয় গোট মূল্যায়ন</option>
+        <option value="বছৰেকীয়া">বছৰেকীয়া মূল্যায়ন</option>
     </select>
 
     <div class="grid-inputs">
@@ -166,7 +166,9 @@
         d.append("roll", document.getElementById('inRoll').value);
         d.append("name", document.getElementById('inName').value);
         currentSubs.forEach((s, i) => d.append("m" + (i+1), document.getElementById('m' + (i+1)).value));
-        fetch(url, { method: 'POST', mode: 'no-cors', body: d }).then(() => alert('সফলভাৱে জমা হ’ল!'));
+        fetch(url, { method: 'POST', mode: 'no-cors', body: d })
+        .then(() => alert('সফলভাৱে জমা হ’ল!'))
+        .catch(() => alert('সংযোগৰ সমস্যা হৈছে।'));
     }
 
     function fetchMarks() {
@@ -174,20 +176,27 @@
         let roll = document.getElementById('inRoll').value;
         let exam = document.getElementById('inExam').value;
         if(!roll) { alert("ৰোল নম্বৰ লিখক"); return; }
-        fetch(url + "?roll=" + roll + "&examType=" + exam)
+        
+        // action=fetch যোগ কৰা হৈছে যাতে আগৰ নম্বৰ বিচাৰি পায়
+        fetch(url + "?action=fetch&roll=" + roll + "&examType=" + exam)
         .then(res => res.json())
         .then(data => {
-            if(data === "Not Found") { alert("তথ্য পোৱা নগ’ল।"); } 
+            if(data === "Not Found" || data === "Sheet Not Found") { alert("তথ্য পোৱা নগ’ল।"); } 
             else {
                 document.getElementById('inName').value = data[1]; 
-                let colIdx = 4; 
+                let colIdx = 4; // Col E (Index 4)
                 for(let i=1; i<=currentSubs.length; i++) {
                     let input = document.getElementById('m'+i);
-                    if(input) { input.value = data[colIdx]; colIdx += 2; }
+                    if(input) { 
+                        input.value = data[colIdx]; 
+                        colIdx += 2; 
+                    }
                 }
-                sync(); alert("তথ্য লোড হ’ল।");
+                sync(); 
+                alert("তথ্য লোড হ’ল।");
             }
-        });
+        })
+        .catch(() => alert("গুগল শ্বীটৰ সৈতে সংযোগ হোৱা নাই।"));
     }
     updateSubjects();
 </script>
