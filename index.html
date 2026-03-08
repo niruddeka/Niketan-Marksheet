@@ -1,85 +1,138 @@
 <!DOCTYPE html>
-<html>
+<html lang="as">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>নম্বৰ এন্ট্ৰি প্ৰপত্ৰ - ২০২৬</title>
+    <title>প্ৰগতি পত্ৰ - ২০২৬</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background: #eef2f3; padding: 15px; }
-        .box { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); max-width: 500px; margin: auto; }
-        h2 { text-align: center; color: #1a5276; font-size: 18px; margin-bottom: 20px; border-bottom: 2px solid #1a5276; padding-bottom: 10px; }
-        label { font-weight: bold; font-size: 14px; margin-top: 10px; display: block; }
-        input, select { width: 100%; padding: 12px; margin: 5px 0 15px 0; border: 1px solid #bdc3c7; border-radius: 8px; box-sizing: border-box; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn-submit { width: 100%; padding: 15px; background: #28b463; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        .btn-submit:hover { background: #239b56; }
-        .btn-pdf { width: 100%; padding: 12px; background: #2e86c1; color: white; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer; }
+        body { font-family: 'Arial', sans-serif; padding: 10px; background: #fff; }
+        .no-print { background: #f4f4f4; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; border: 1px solid #ccc; }
+        input, select { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #aaa; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .btn-save { background: #28a745; color: white; }
+        .btn-pdf { background: #007bff; color: white; margin-top: 5px; }
+        
+        /* মাৰ্কশ্বীটৰ ডিজাইন - যিটো আগতে আলোচনা কৰিছিলোঁ */
+        .print-area { display: none; width: 100%; max-width: 600px; margin: auto; padding: 20px; border: 2px solid #000; }
+        .header { text-align: center; line-height: 1.2; }
+        .info { display: flex; justify-content: space-between; margin-top: 15px; font-weight: bold; border-bottom: 1px solid #000; padding-bottom: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: center; }
+        .sub-name { text-align: left; padding-left: 10px; font-weight: bold; }
+
+        @media print {
+            .no-print { display: none; }
+            .print-area { display: block; border: 2px solid #000; }
+        }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2>পৰীক্ষাৰ নম্বৰ এন্ট্ৰি ফৰ্ম</h2>
-    <form id="marksForm">
-        <label>বিদ্যালয়/নিকেতনৰ নাম:</label>
-        <input type="text" name="schoolName" placeholder="নিকেতনৰ নাম লিখক" required>
+<div class="no-print">
+    <h3 style="text-align:center;">নম্বৰ এন্ট্ৰি আৰু পিডিএফ জেনেৰেটৰ</h3>
+    <label>বিদ্যালয়ৰ নাম লিখক:</label>
+    <input type="text" id="inSchool" oninput="updateView()" placeholder="নিকেতনৰ নাম">
+    
+    <label>পৰীক্ষা বাছি লওক:</label>
+    <select id="inExam" onchange="updateView()">
+        <option value="প্ৰথম গোট">১ম গোট মূল্যায়ন</option>
+        <option value="ছয় মাহিলী">৬ মাহিলী মূল্যায়ন</option>
+        <option value="দ্বিতীয় গোট">২য় গোট মূল্যায়ন</option>
+        <option value="ন-মাহিলী">ন-মাহিলী মূল্যায়ন</option>
+        <option value="বছৰেকীয়া">বছৰেকীয়া মূল্যায়ন</option>
+        <option value="তৃতীয় গোট">৩য় গোট মূল্যায়ন</option>
+    </select>
 
-        <label>পৰীক্ষা বাছি লওক:</label>
-        <select name="examType" required>
-            <option value="প্ৰথম গোট">১ম গোট মূল্যায়ন</option>
-            <option value="ছয় মাহিলী">৬ মাহিলী মূল্যায়ন</option>
-            <option value="দ্বিতীয় গোট">২য় গোট মূল্যায়ন</option>
-            <option value="ন-মাহিলী">ন-মাহিলী মূল্যায়ন</option>
-            <option value="বছৰেকীয়া">বছৰেকীয়া মূল্যায়ন</option>
-            <option value="তিলিমাহিলী">তিনিমাহিলী মূল্যায়ন</option>
-        </select>
+    <input type="number" id="inRoll" oninput="updateView()" placeholder="ৰোল নম্বৰ">
+    <input type="text" id="inName" oninput="updateView()" placeholder="ছাত্ৰৰ নাম">
+    <input type="text" id="inYear" oninput="updateView()" value="২০২৬">
 
-        <div class="grid">
-            <div>
-                <label>ৰোল নম্বৰ:</label>
-                <input type="number" name="roll" required>
-            </div>
-            <div>
-                <label>ছাত্ৰ/ছাত্ৰীৰ নাম:</label>
-                <input type="text" name="name" required>
-            </div>
-        </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+        <input type="number" id="mAsm" oninput="updateView()" placeholder="অসমীয়া">
+        <input type="number" id="mEng" oninput="updateView()" placeholder="ইংৰাজী">
+        <input type="number" id="mMath" oninput="updateView()" placeholder="গণিত">
+        <input type="number" id="mHin" oninput="updateView()" placeholder="হিন্দী">
+        <input type="number" id="mSci" oninput="updateView()" placeholder="বিজ্ঞান">
+        <input type="number" id="mSS" oninput="updateView()" placeholder="সমাজ বি.">
+        <input type="number" id="mSan" oninput="updateView()" placeholder="সংস্কৃত">
+        <input type="number" id="mMre" oninput="updateView()" placeholder="নীতিশিক্ষা">
+        <input type="number" id="mEnv" oninput="updateView()" placeholder="পৰিৱেশ">
+        <input type="number" id="mComp" oninput="updateView()" placeholder="কম্পিউটাৰ">
+        <input type="number" id="mArt" oninput="updateView()" placeholder="ছবি">
+    </div>
 
-        <label style="text-align:center; color:#e67e22; font-size:16px;">বিষয়সমূহৰ নম্বৰ (Marks)</label>
-        <div class="grid">
-            <input type="number" name="asm" placeholder="অসমীয়া">
-            <input type="number" name="eng" placeholder="ইংৰাজী">
-            <input type="number" name="math" placeholder="গণিত">
-            <input type="number" name="hin" placeholder="হিন্দী">
-            <input type="number" name="sci" placeholder="বিজ্ঞান">
-            <input type="number" name="ss" placeholder="সমাজ বি.">
-            <input type="number" name="san" placeholder="সংস্কৃত">
-            <input type="number" name="mre" placeholder="নীতিশিক্ষা">
-            <input type="number" name="env" placeholder="পৰিৱেশ">
-            <input type="number" name="comp" placeholder="কম্পিউটাৰ">
-            <input type="number" name="art" placeholder="ছবি/অংকন">
-        </div>
+    <button class="btn-save" onclick="sendData()">গুগল শ্বীটত জমা কৰক</button>
+    <button class="btn-pdf" onclick="window.print()">পিডিএফ (PDF) ডাউনলোড</button>
+</div>
 
-        <button type="button" class="btn-submit" onclick="submitData()">গুগল শ্বীটত জমা কৰক</button>
-        <button type="button" class="btn-pdf" onclick="window.print()">পিডিএফ (PDF) কৰক</button>
-    </form>
+<div class="print-area" id="printArea">
+    <div class="header">
+        <h2 id="vSchool">বিদ্যালয়ৰ নাম</h2>
+        <h3 id="vExam">পৰীক্ষাৰ নাম</h3>
+        <p>বৰ্ষ: <span id="vYear">২০২৬</span></p>
+    </div>
+    <div class="info">
+        <span>নাম: <span id="vName">................</span></span>
+        <span>ৰোল নং: <span id="vRoll">....</span></span>
+    </div>
+    <table>
+        <thead>
+            <tr><th>বিষয়</th><th>পূৰ্ণ নম্বৰ</th><th>প্ৰাপ্ত নম্বৰ</th></tr>
+        </thead>
+        <tbody id="tableBody">
+            </tbody>
+    </table>
+    <div style="margin-top: 50px; display: flex; justify-content: space-between; font-weight: bold;">
+        <span>আচাৰ্যৰ স্বাক্ষৰ</span>
+        <span>প্ৰধান আচাৰ্যৰ স্বাক্ষৰ</span>
+    </div>
 </div>
 
 <script>
-    function submitData() {
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwr-ix8M1Z_pwSgIuGUyMK1jTT8NC1k1lz8cI-wn5HVapBJeCnoif5Qm3AUIdrjLU-U/exec';
-        const form = document.getElementById('marksForm');
+    function updateView() {
+        document.getElementById('vSchool').innerText = document.getElementById('inSchool').value || "বিদ্যালয়ৰ নাম";
+        document.getElementById('vExam').innerText = document.getElementById('inExam').value;
+        document.getElementById('vYear').innerText = document.getElementById('inYear').value;
+        document.getElementById('vName').innerText = document.getElementById('inName').value || "................";
+        document.getElementById('vRoll').innerText = document.getElementById('inRoll').value || "....";
+
+        let subjects = [
+            ["অসমীয়া", "mAsm"], ["ইংৰাজী", "mEng"], ["গণিত", "mMath"], ["হিন্দী", "mHin"],
+            ["বিজ্ঞান", "mSci"], ["সমাজ বি.", "mSS"], ["সংস্কৃত", "mSan"], ["নীতিশিক্ষা", "mMre"],
+            ["পৰিৱেশ", "mEnv"], ["কম্পিউটাৰ", "mComp"], ["ছবি", "mArt"]
+        ];
         
-        fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: new URLSearchParams(new FormData(form))
-        })
-        .then(() => {
-            alert('সফলভাৱে জমা হৈছে, নিৰুদ দা!');
-            form.reset();
-        })
-        .catch(error => alert('ভুল হৈছে! আকৌ চেষ্টা কৰক।'));
+        let html = "";
+        subjects.forEach(s => {
+            let val = document.getElementById(s[1]).value || "0";
+            html += `<tr><td class="sub-name">${s[0]}</td><td>১০০/৫০</td><td>${val}</td></tr>`;
+        });
+        document.getElementById('tableBody').innerHTML = html;
     }
+
+    function sendData() {
+        const scriptURL = 'আপোনাৰ_WEB_APP_URL_টো_ইয়াত_দিয়ক';
+        let data = new URLSearchParams();
+        data.append("examType", document.getElementById('inExam').value);
+        data.append("roll", document.getElementById('inRoll').value);
+        data.append("name", document.getElementById('inName').value);
+        data.append("asm", document.getElementById('mAsm').value);
+        data.append("eng", document.getElementById('mEng').value);
+        data.append("math", document.getElementById('mMath').value);
+        data.append("hin", document.getElementById('mHin').value);
+        data.append("sci", document.getElementById('mSci').value);
+        data.append("ss", document.getElementById('mSS').value);
+        data.append("san", document.getElementById('mSan').value);
+        data.append("mre", document.getElementById('mMre').value);
+        data.append("env", document.getElementById('mEnv').value);
+        data.append("comp", document.getElementById('mComp').value);
+        data.append("art", document.getElementById('mArt').value);
+
+        fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: data })
+        .then(() => alert('সফলভাৱে জমা হৈছে!'))
+        .catch(e => alert('ভুল হৈছে!'));
+    }
+    updateView();
 </script>
 
 </body>
