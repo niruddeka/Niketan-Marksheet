@@ -155,7 +155,7 @@
     }
 
     function send() {
-        const url = 'https://script.google.com/macros/s/AKfycbxchjpj_f-v2Hcnoz2U4N830u5tqF3BOvE-JhYx_F3uP0g4iarxWoaOoym-VFP9p24/exec';
+        const url = 'https://script.google.com/macros/s/AKfycbyjbXq1y-NZQk8r4pzcmd0jaZBkc8XXxV_o6dIqRWRu8g7cofsnF3QEvXPdLR-6yVHy/exec';
         let d = new URLSearchParams();
         d.append("examType", document.getElementById('inExam').value);
         d.append("className", document.getElementById('inClass').value); // শ্ৰেণী যোগ কৰা হ'ল
@@ -169,7 +169,7 @@
     }
 
     function fetchMarks() {
-        const url = 'https://script.google.com/macros/s/AKfycbxchjpj_f-v2Hcnoz2U4N830u5tqF3BOvE-JhYx_F3uP0g4iarxWoaOoym-VFP9p24/exec';
+        const url = 'https://script.google.com/macros/s/AKfycbyjbXq1y-NZQk8r4pzcmd0jaZBkc8XXxV_o6dIqRWRu8g7cofsnF3QEvXPdLR-6yVHy/exec';
         let roll = document.getElementById('inRoll').value;
         let exam = document.getElementById('inExam').value;
         if(!roll) { alert("ৰোল নম্বৰ লিখক"); return; }
